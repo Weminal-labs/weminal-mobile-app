@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:weminal_app/services/api_service.dart';
-import 'package:weminal_app/topic/topic_state.dart';
+import 'package:weminal_app/states/topic_state.dart';
 import 'package:weminal_app/utilities/page_response.dart';
 
-import 'topic_model.dart';
+import '../models/topic_model.dart';
 
 class TopicProvider extends ChangeNotifier {
   TopicState _state = TopicState.initial;

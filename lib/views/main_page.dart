@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weminal_app/home/home_page.dart';
-import 'package:weminal_app/page3/page3.dart';
-import 'package:weminal_app/page4/page4.dart';
-import 'package:weminal_app/topic/topic_page.dart';
+import 'package:weminal_app/views/home_page.dart';
+import 'package:weminal_app/views/page3.dart';
+import 'package:weminal_app/views/page4.dart';
+import 'package:weminal_app/views/topic_page.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 
 class MainPage extends StatefulWidget {

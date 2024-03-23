@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:weminal_app/topic/topic_model.dart';
+import 'package:weminal_app/models/topic_model.dart';
 import 'package:weminal_app/utilities/page_response.dart';
 
 class ApiService {

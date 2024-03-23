@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weminal_app/topic/topic_provider.dart';
-import 'package:weminal_app/topic/topic_state.dart';
+import 'package:weminal_app/viewmodels/topic_provider.dart';
+import 'package:weminal_app/states/topic_state.dart';
 
 class TopicPage extends StatefulWidget {
   const TopicPage({Key? key}) : super(key: key);

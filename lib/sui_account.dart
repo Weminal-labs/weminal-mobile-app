@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:sui/cryptography/ed25519_keypair.dart';
@@ -91,7 +90,7 @@ class SuiAccount {
     return account;
   }
 
-  static String generateMnemonic({int strength = 128 }) {
+  static String generateMnemonic({int strength = 128}) {
     return mnemonic.generateMnemonic(strength: strength);
   }
 
@@ -126,15 +125,13 @@ class SuiAccount {
   }
 
   SignaturePubkeyPair signData(Uint8List data) {
-    return SignaturePubkeyPair(
-      _keypair.getKeyScheme(),
-      _keypair.signData(data),
-      pubKey: _keypair.getPublicKey()
-    );
+    return SignaturePubkeyPair(_keypair.getKeyScheme(), _keypair.signData(data),
+        pubKey: _keypair.getPublicKey());
   }
 
   bool verify(Uint8List data, SignaturePubkeyPair signature) {
-    bool success = _keypair.verify(data, signature.signature, signature.pubKey!.toRawBytes());
+    bool success = _keypair.verify(
+        data, signature.signature, signature.pubKey!.toRawBytes());
     return success;
   }
 }

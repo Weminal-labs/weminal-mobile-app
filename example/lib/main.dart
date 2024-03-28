@@ -81,12 +81,12 @@ class _MyHomePageState extends State<MyHomePage> {
         return const Home();
       case 1:
         return Faucet(acc);
-      case 2:
-        return Split(acc);
-      case 3:
-        return Merge(acc);
-      case 4:
-        return Transfer(acc);
+      // case 2:
+      //   return Split(acc);
+      // case 3:
+      //   return Merge(acc);
+      // case 4:
+      //   return Transfer(acc);
     }
 
     return Container();
@@ -202,45 +202,45 @@ class _MyHomePageState extends State<MyHomePage> {
                     menuClick(1);
                   },
                 ),
-                ListTile(
-                  title: const Text("Split SUI"),
-                  onTap: () {
-                    Navigator.pop(context);
-                    menuClick(2);
-                  },
-                ),
-                ListTile(
-                  title: const Text(("Merge Sui")),
-                  onTap: () {
-                    Navigator.pop(context);
-                    menuClick(3);
-                  },
-                ),
-                ListTile(
-                  title: const Text(("Transfer Sui")),
-                  onTap: () {
-                    Navigator.pop(context);
-                    menuClick(4);
-                  },
-                ),
+                // ListTile(
+                //   title: const Text("Split SUI"),
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     menuClick(2);
+                //   },
+                // ),
+                // ListTile(
+                //   title: const Text(("Merge Sui")),
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     menuClick(3);
+                //   },
+                // ),
+                // ListTile(
+                //   title: const Text(("Transfer Sui")),
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     menuClick(4);
+                //   },
+                // ),
                 ListTile(
                   title: const Text(("Token menu")),
                   onTap: () {
                     _navigateToTokenManage();
                   },
                 ),
-                ListTile(
-                  title: const Text(("Share example")),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ShareDemo(),
-                      ),
-                    );
-                  },
-                ),
+                // ListTile(
+                //   title: const Text(("Share example")),
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => ShareDemo(),
+                //       ),
+                //     );
+                //   },
+                // ),
                 // ListTile(
                 //   title: const Text(("Publish Package")),
                 //   onTap: () {

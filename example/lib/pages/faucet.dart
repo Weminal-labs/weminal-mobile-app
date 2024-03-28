@@ -33,6 +33,7 @@ class _FaucetState extends State<Faucet> {
     if (requestingFaucet) return;
 
     final address = widget.account.getAddress();
+    print('${widget.account.getAddress()} xxxxxxxxxxxxxxxxxxxxxxx');
 
     var resp = await suiClient.getBalance(address);
     balance = resp.totalBalance;

@@ -41,15 +41,8 @@ void showErrorToast(BuildContext context, String title, {int seconds = 3}) {
   showToast(context, title, seconds: seconds, success: false);
 }
 
-Future<SuiAccount> getLocalSuiAccount() async {
-  const suiAccountKey = "sui_dart_account_key";
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? priKey = prefs.getString(suiAccountKey);
-  if (priKey == null) {
-    SuiAccount account = SuiAccount.ed25519Account();
-    String priKeyHex = account.privateKeyHex();
-    await prefs.setString(suiAccountKey, priKeyHex);
-    return account;
-  }
+Future<SuiAccount> getSuiAccount() async {
+  String? priKey =
+      '4f8758c084e6ccc70d3380320e78e586011fd16cb9f03a25affdd50ff3445db7';
   return SuiAccount.fromPrivateKey(priKey, SignatureScheme.Ed25519);
 }

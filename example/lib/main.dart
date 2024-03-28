@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:focus_detector_v2/focus_detector_v2.dart';
 import 'package:sui/sui.dart';
 
+import 'package:example/pages/managed_token.dart';
 import 'helper/helper.dart';
 import 'pages/split.dart';
 import 'pages/token_menu.dart';
@@ -57,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    getLocalSuiAccount().then((value) {
+    getSuiAccount().then((value) {
       setState(() {
         account = value;
       });
@@ -220,6 +221,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   onTap: () {
                     Navigator.pop(context);
                     menuClick(4);
+                  },
+                ),
+                ListTile(
+                  title: const Text(("Token menu")),
+                  onTap: () {
+                    _navigateToTokenManage();
                   },
                 ),
                 ListTile(

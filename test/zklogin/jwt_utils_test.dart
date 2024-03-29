@@ -10,6 +10,7 @@ void main() {
       ),
       'iss',
     );
+    print("$result");
     final isValid = result == 'https://accounts.google.com';
     expect(isValid, true);
   });

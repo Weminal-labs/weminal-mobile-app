@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:sui/cryptography/keypair.dart';
@@ -10,11 +9,8 @@ import 'package:sui/types/common.dart';
 class RawSigner extends SignerWithProvider {
   late final Keypair _keypair;
 
-  RawSigner(
-    Keypair keypair,
-    {String? endpoint,
-    TxnDataSerializer? serializer}
-  ): super(endpoint ?? "", serializer) {
+  RawSigner(Keypair keypair, {String? endpoint, TxnDataSerializer? serializer})
+      : super(endpoint ?? "", serializer) {
     _keypair = keypair;
   }
 
@@ -30,15 +26,13 @@ class RawSigner extends SignerWithProvider {
 
   @override
   SignaturePubkeyPair signData(Uint8List data) {
-    return SignaturePubkeyPair(
-      _keypair.getKeyScheme(),
-      _keypair.signData(data),
-      pubKey: _keypair.getPublicKey()
-    );
+    return SignaturePubkeyPair(_keypair.getKeyScheme(), _keypair.signData(data),
+        pubKey: _keypair.getPublicKey());
   }
 
   bool verify(Uint8List data, SignaturePubkeyPair signature) {
-    bool success = _keypair.verify(data, signature.signature, signature.pubKey!.toRawBytes());
+    bool success = _keypair.verify(
+        data, signature.signature, signature.pubKey!.toRawBytes());
     return success;
   }
 }

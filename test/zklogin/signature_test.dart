@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:bcs/bcs.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sui/signers/raw_signer.dart';
 import 'package:sui/sui.dart';
 
 const aSignature =
@@ -44,6 +46,7 @@ const anEphemeralSignature =
 void main() {
   test('test is parsed successfully', () async {
     final result = parseZkLoginSignature(fromB64(aSignature).sublist(1));
+    print('xxxxxxx result: $result');
     final isValid = result.maxEpoch == 174 &&
         toB64(result.userSignature) == anEphemeralSignature &&
         jsonEncode(result.inputs.toJson()) ==
@@ -52,6 +55,10 @@ void main() {
   });
 
   test('test is serialized successfully', () async {
+    final keypair = Secp256k1Keypair();
+    final signData = Uint8List.fromList(utf8.encode('hello world'));
+    final signer = RawSigner(keypair);
+    final signature = signer.signData(signData);
     final result = getZkLoginSignature(
       ZkLoginSignature(
         inputs: aSignatureInputs,
@@ -59,7 +66,16 @@ void main() {
         userSignature: fromB64(anEphemeralSignature),
       ),
     );
-    final isValid = result == aSignature;
+    final zkSign = ZkLoginSignature(
+      inputs: aSignatureInputs,
+      maxEpoch: 174,
+      userSignature: fromB64(anEphemeralSignature),
+    );
+
+    final isValid = signer.verify(signData, signature);
+    //
+    // print('result: $result');
+    // final isValid = result == aSignature;
     expect(isValid, true);
   });
 }

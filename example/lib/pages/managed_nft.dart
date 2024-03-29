@@ -7,6 +7,7 @@ import 'package:sui/sui_client.dart';
 import 'package:sui/types/objects.dart';
 import 'package:sui/types/transactions.dart';
 import 'package:sui/sui.dart';
+import 'package:sui/types/validator.dart';
 
 class ManagedNFT extends StatefulWidget {
   const ManagedNFT({required this.client, Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class ManagedNFT extends StatefulWidget {
 
 class _ManagedNFTState extends State<ManagedNFT> {
   SuiAccount? account;
+  SuiAccount? zkAccount;
 
   @override
   void initState() {
@@ -27,6 +29,7 @@ class _ManagedNFTState extends State<ManagedNFT> {
         account = value;
       });
     });
+
     super.initState();
   }
 
@@ -36,7 +39,7 @@ class _ManagedNFTState extends State<ManagedNFT> {
   TextEditingController burnTextController = TextEditingController();
 
   String? packageId =
-      '0xb4b091bfe765ef63a07771c5720a7248ea14f778ac2b597009b94179fcde764a';
+      '0xade93de5f8b2fef53cc9fcc0f30b3a2b27fc073e36820d37f52a01eba379dd50';
   String? objectId;
   String? transactionModule = 'tdtc';
   String? coinType;
@@ -64,28 +67,37 @@ class _ManagedNFTState extends State<ManagedNFT> {
         if (packageId != null)
           ElevatedButton(
               onPressed: () async {
-                const String arg1 =
-                    '0xe63ccd1373dc82db5fff3f74f78e314b5cd213408a3d6fbf9556345c040e5aef';
+                const String object =
+                    '0x9c453808a7dfc7b41f876cce085b6e81fff8e182dce079067eb237caf67fe6e7';
                 const int arg2 = 10;
-                const String arg3 =
-                    '0x98c9819dacee1543eb9ee9bda8d625d1669f5ef784cfc65e4f04e6d2a89fd724';
+                const String reciver =
+                    '0x02b951e9357d5d6da406803e3bcacd2596808ffe733d40a171a8ea816037d1b0';
 
                 final tx = TransactionBlock();
                 tx.setGasBudget(BigInt.from(10000000));
                 tx.moveCall('$packageId::tdtc::mint', arguments: [
-                  tx.pure(arg1),
+                  tx.pure(object),
                   tx.pureInt(arg2),
-                  tx.pureAddress(arg3)
+                  tx.pureAddress(reciver)
                 ]);
                 print('MAKE CALL!!!!!!!!!!!!!!!!!!!!!!!');
 
-                final result =
-                    await widget.client.signAndExecuteTransactionBlock(
-                  account!,
+                SuiClient suiClient = SuiClient(SuiUrls.devnet);
+                final result = await suiClient.signAndExecuteTransactionBlock(
+                  zkAccount!,
                   tx,
                   requestType: ExecuteTransaction.WaitForLocalExecution,
                 );
                 print('RESULT CALL: ${result.digest}');
+
+                SuiSystemStateSummary suiSystemStateSumary =
+                    await suiClient.getLatestSuiSystemState();
+                print(
+                    'suiSystemStateSumary.epoch: ${suiSystemStateSumary.epoch}');
+                print(
+                    'suiSystemStateSumary.epoch: ${suiSystemStateSumary.epochDurationMs}');
+                print(
+                    'suiSystemStateSumary.epochStartTimestampMs: ${suiSystemStateSumary.epochStartTimestampMs}');
               },
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(50),

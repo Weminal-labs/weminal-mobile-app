@@ -119,6 +119,7 @@ void main() {
     final signData = Uint8List.fromList(utf8.encode('hello world'));
     final signer = RawSigner(keypair);
     final signature = signer.signData(signData);
+
     final isValid = signer.verify(signData, signature);
     expect(isValid, true);
   });

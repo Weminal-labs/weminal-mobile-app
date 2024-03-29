@@ -47,3 +47,10 @@ Future<SuiAccount> getSuiAccount() async {
 
   return SuiAccount.fromPrivateKey(priKey, SignatureScheme.Ed25519);
 }
+
+Future<SuiAccount> getSuiZkAccount() async {
+  String? priKey =
+      '4f8758c084e6ccc70d3380320e78e586011fd16cb9f03a25affdd50ff3445db7';
+
+  return SuiAccount.fromPrivateKey(priKey, SignatureScheme.ZkLogin);
+}

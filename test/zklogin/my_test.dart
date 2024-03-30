@@ -20,12 +20,26 @@ void getNonce(pubEphemeral) async {
 void getproof() {}
 
 void main() {
-  test('test generates the correct address', () async {
-    final txb = TransactionBlock();
-    final ephemeralkey = Ed25519Keypair();
-    print(ephemeralkey.getPublicKey());
-    print(ephemeralkey.getSecretKey());
-    print('xxx');
-    expect(true, true);
-  });
+  // JavascriptRuntime flutterJs = getJavascriptRuntime();
+
+  // test('test generates the correct address', () async {
+  //   JavascriptRuntime flutterJs = getJavascriptRuntime();
+  //
+  //   // String _jsResult = '';
+  //   // try {
+  //   //   JsEvalResult jsResult =
+  //   //       flutterJs.evaluate("Math.trunc(Math.random() * 100).toString();");
+  //   //   _jsResult = jsResult.stringResult;
+  //   //   print('_jsResult: $_jsResult');
+  //   // } catch (e) {
+  //   //   print('ERRO: ${e}');
+  //   // }
+  //
+  //   // final txb = TransactionBlock();
+  //   // final ephemeralkey = Ed25519Keypair();
+  //   // print(ephemeralkey.getPublicKey());
+  //   // print(ephemeralkey.getSecretKey());
+  //   // print('xxx');
+  //   // expect(true, true);
+  // });
 }

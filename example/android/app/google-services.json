@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "228187093845",
+    "project_id": "wenimal-d4779",
+    "storage_bucket": "wenimal-d4779.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228187093845:android:ddd0b4db5e4398a1ad8ddc",
+        "android_client_info": {
+          "package_name": "com.example.example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228187093845-mrficn5r3vah7r6gm18s0jj0740907ql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.example",
+            "certificate_hash": "e3abbe1597f4f66e90fcb1eb940fd4498084421d"
+          }
+        },
+        {
+          "client_id": "228187093845-sn549vn6kgbaj7094q7h14p6v0fp37or.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa_OLEqnFCftFWT_TwLbNNPzfGp2h1BPw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228187093845-sn549vn6kgbaj7094q7h14p6v0fp37or.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "228187093845-bih5q6btkkjv717sjfbl4rnqsptrmlc3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.example"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

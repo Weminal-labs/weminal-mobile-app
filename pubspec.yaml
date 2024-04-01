@@ -25,6 +25,8 @@ dependencies:
   jwt_decoder: ^2.0.1
   dart_jsonwebtoken: ^2.13.0
   http: ^1.2.0
+  buffer: ^1.2.3
+  webview_flutter: ^4.7.0
 
 dev_dependencies:
   flutter_test:

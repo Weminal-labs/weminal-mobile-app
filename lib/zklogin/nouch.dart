@@ -65,9 +65,14 @@ String generateNonce(PublicKey publicKey, num maxEpoch, randomness) {
   }
 }
 
-Future<Map<String, String>> getInfoRequestProof() async {
+Future<Map<String, dynamic>> getInfoRequestProof() async {
   BigInt randomness = createRandomness();
   var ephemeralkey = Ed25519Keypair();
+  // get ephemeralKeyPair
+  var ephemeralPrivateKey = ephemeralkey.getSecretKey();
+  var ephemeralKeyPairArray = Uint8List.fromList(ephemeralPrivateKey);
+  var ephemeralKeyPair = Ed25519Keypair.fromSecretKey(ephemeralKeyPairArray);
+  //
   var publicKey = ephemeralkey.getPublicKey();
   var publicKeyBytes = toBigIntBE(publicKey.toSuiBytes());
   final eph_public_key_0 = publicKeyBytes ~/ BigInt.from(2).pow(128);
@@ -95,6 +100,7 @@ Future<Map<String, String>> getInfoRequestProof() async {
     'maxEpoch': maxEpoch.toString(),
     'jwtRandomness': randomness.toString(),
     'salt': '255873485666802367946136116146407409355',
-    'nonce': nonce
+    'nonce': nonce,
+    'ephemeralKeyPair': ephemeralKeyPair
   };
 }

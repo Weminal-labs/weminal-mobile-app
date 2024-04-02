@@ -171,9 +171,13 @@ class _MyPageState extends State<MyPage> {
                   // get userSignature
                   Ed25519Keypair ephemeralKeyPair = res['ephemeralKeyPair'];
                   print('ephemeralKeyPair: $ephemeralKeyPair');
+                  print('secret key: ${ephemeralKeyPair.getSecretKey()}');
+
                   var suiClient = SuiClient(SuiUrls.devnet);
                   var txb = TransactionBlock();
                   txb.setSender(userAddress);
+
+                  print('res: $res');
 
                   SignatureWithBytes signatureWithBytes = await txb.sign(
                     SignOptions(ephemeralKeyPair),

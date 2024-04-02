@@ -101,6 +101,7 @@ Future<Map<String, dynamic>> getInfoRequestProof() async {
     'jwtRandomness': randomness.toString(),
     'salt': '255873485666802367946136116146407409355',
     'nonce': nonce,
-    'ephemeralKeyPair': ephemeralKeyPair
+    'ephemeralKeyPair': ephemeralKeyPair,
+    'ephemeralPrivateKey': ephemeralPrivateKey
   };
 }

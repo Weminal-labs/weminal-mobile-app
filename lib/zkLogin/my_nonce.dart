@@ -42,7 +42,6 @@ String generateNonce(PublicKey publicKey, num maxEpoch, randomness) {
     if (randomness is String) {
       randomness = BigInt.parse(randomness);
     }
-    print('randomness: $randomness');
     var publicKeyBytes = toBigIntBE(publicKey.toSuiBytes());
     final eph_public_key_0 = publicKeyBytes ~/ BigInt.from(2).pow(128);
     final eph_public_key_1 = publicKeyBytes % BigInt.from(2).pow(128);
@@ -55,7 +54,6 @@ String generateNonce(PublicKey publicKey, num maxEpoch, randomness) {
     var Z = toBigEndianBytes(bigNum, 20);
     var nonce = base64Url.encode(Z);
     nonce = nonce.replaceAll('=', '');
-    print(nonce);
     if (nonce.length != NONCE_LENGTH) {
       throw new Exception(
           'Length of nonce $nonce (${nonce.length}) is not equal to $NONCE_LENGTH');
@@ -65,7 +63,6 @@ String generateNonce(PublicKey publicKey, num maxEpoch, randomness) {
 }
 
 Future<Map<String, dynamic>> getInfoRequestProof() async {
-  print('getInfoRequestProof');
   BigInt randomness = createRandomness();
   var ephemeralkey = Ed25519Keypair();
   // get ephemeralKeyPair
@@ -81,7 +78,6 @@ Future<Map<String, dynamic>> getInfoRequestProof() async {
   SuiClient client = SuiClient(SuiUrls.devnet);
 
   var getEpoch = await client.getLatestSuiSystemState();
-  print('xxx getInfoRequestProof');
 
   var epoch = getEpoch.epoch;
   var maxEpoch = double.parse(epoch) + 10;
@@ -92,7 +88,6 @@ Future<Map<String, dynamic>> getInfoRequestProof() async {
   var Z = toBigEndianBytes(bigNum, 20);
   var nonce = base64Url.encode(Z);
   nonce = nonce.replaceAll('=', '');
-  print(nonce);
 
   var extendedEphemeralPublicKey =
       toBigIntBE(ephemeralkey.getPublicKey().toSuiBytes()).toString();
@@ -101,7 +96,6 @@ Future<Map<String, dynamic>> getInfoRequestProof() async {
     throw new Exception(
         'Length of nonce $nonce (${nonce.length}) is not equal to $NONCE_LENGTH');
   }
-  print('end getInfoRequestProof');
   return {
     'extendedEphemeralPublicKey': extendedEphemeralPublicKey,
     'maxEpoch': maxEpoch.toString(),

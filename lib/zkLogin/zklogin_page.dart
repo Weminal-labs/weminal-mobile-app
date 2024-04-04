@@ -5,13 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:sui/sui.dart';
+import 'package:weminal_app/helper/helper.dart';
 import 'package:weminal_app/zkLogin/my_address.dart';
 import 'package:weminal_app/zkLogin/my_utils.dart';
 import '../models/request_proof_model.dart';
 import 'my_nonce.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:sui/zklogin/address.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -24,7 +23,7 @@ class WebViewPage extends StatefulWidget {
 
   const WebViewPage({super.key, required this.url});
   @override
-  _WebViewPageState createState() => _WebViewPageState();
+  State<WebViewPage> createState() => _WebViewPageState();
 }
 
 class _WebViewPageState extends State<WebViewPage> {
@@ -43,14 +42,11 @@ class _WebViewPageState extends State<WebViewPage> {
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {
-            print('redierct: $redierct');
             String temp = redierct.replaceAll('$REDIRECT_URL', '');
             temp = temp.substring(0, temp.indexOf('&'));
-            print('temp: $temp');
             Navigator.pop(context, temp);
           },
           onNavigationRequest: (NavigationRequest request) {
-            print('onNavigationRequest: ${request.url}');
             redierct = request.url;
             if (request.url.startsWith('https://www.youtube.com/')) {
               return NavigationDecision.prevent;
@@ -64,7 +60,6 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('URL WebViewPage: ${widget.url}');
     return Scaffold(
       appBar: AppBar(title: const Text('Flutter Simple Example')),
       body: WebViewWidget(
@@ -114,10 +109,8 @@ class _MyPageState extends State<MyPage> {
             AsyncSnapshot<Map<String, dynamic>> snapshot) {
           if (snapshot.hasData) {
             Map<String, dynamic> res = snapshot.data!;
-            print('getInfoRequestProof: $res');
             String URL =
                 'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=1083467233418-i6est2jg0mbd59ptddrf6elh2kg7uvf4.apps.googleusercontent.com&response_type=id_token&redirect_uri=$REDIRECT_URL&scope=openid&nonce=${res['nonce']}&service=lso&o2v=2&theme=mn&ddm=0&flowName=GeneralOAuthFlow';
-            print('before URL: $URL');
             RequestProofModel requestProofModel = RequestProofModel(
               extendedEphemeralPublicKey: res['extendedEphemeralPublicKey']!,
               maxEpoch: res['maxEpoch']!,
@@ -134,66 +127,11 @@ class _MyPageState extends State<MyPage> {
                           url: URL,
                         ),
                       ));
-                  print('loginResRedirect: $loginResRedirect');
-                  print('loginResRedirect: $loginResRedirect');
 
                   requestProofModel.jwt = loginResRedirect;
-                  var proof = await getProof(RequestProofModel(
-                      jwt: requestProofModel.jwt,
-                      extendedEphemeralPublicKey:
-                          requestProofModel.extendedEphemeralPublicKey,
-                      maxEpoch: requestProofModel.maxEpoch,
-                      jwtRandomness: requestProofModel.jwtRandomness,
-                      salt: requestProofModel.salt,
-                      keyClaimName: requestProofModel.keyClaimName));
-                  print('proof: $proof');
-                  var userAddress = jwtToAddress(requestProofModel.jwt!,
-                      BigInt.parse(requestProofModel.salt));
-                  // Save User Address
-                  final SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setString('userAddress', userAddress);
-                  // Print UserAddress
-                  final String? getUserAddress = prefs.getString('userAddress');
-
-                  print('getUserAddress: $getUserAddress');
-                  final decodedJWT = JwtDecoder.decode(requestProofModel.jwt!);
-                  var addressSeed = genAddressSeed(
-                      BigInt.parse(requestProofModel.salt),
-                      'sub',
-                      decodedJWT['sub'],
-                      decodedJWT['aud']);
-                  print('addressSeed: $addressSeed');
-                  ProofPoints proofPoints =
-                      ProofPoints.fromJson(proof['proofPoints']);
-                  print('proofPoints $proofPoints');
-                  ZkLoginSignatureInputs zkLoginSignatureInputs =
-                      ZkLoginSignatureInputs(
-                    proofPoints: proofPoints,
-                    issBase64Details: Claim.fromJson(proof['issBase64Details']),
-                    addressSeed: addressSeed.toString(),
-                    headerBase64: proof['headerBase64'],
-                  );
-                  print(zkLoginSignatureInputs);
-                  // get userSignature
-                  Ed25519Keypair ephemeralKeyPair = res['ephemeralKeyPair'];
-                  print('ephemeralKeyPair: $ephemeralKeyPair');
-                  print('secret key: ${ephemeralKeyPair.getSecretKey()}');
-
-                  var suiClient = SuiClient(SuiUrls.devnet);
-                  var txb = TransactionBlock();
-                  txb.setSender(userAddress);
-
-                  print('res: $res');
-
-                  SignatureWithBytes signatureWithBytes = await txb.sign(
-                    SignOptions(signer: ephemeralKeyPair, client: suiClient),
-                  );
-                  print('signatureWithBytes: $signatureWithBytes');
-                  // var userSignature = signatureWithBytes.signature;
-                  // print('userSignature: $userSignature');
+                  _handleLogin(requestProofModel, res);
                 },
-                child: Text('Login'),
+                child: const Text('Login'),
               ),
             );
           } else if (snapshot.hasError) {
@@ -210,5 +148,53 @@ class _MyPageState extends State<MyPage> {
         },
       ),
     );
+  }
+
+  void _handleLogin(RequestProofModel requestProofModel, dynamic res) async {
+    var proof = await getProof(RequestProofModel(
+        jwt: requestProofModel.jwt,
+        extendedEphemeralPublicKey:
+            requestProofModel.extendedEphemeralPublicKey,
+        maxEpoch: requestProofModel.maxEpoch,
+        jwtRandomness: requestProofModel.jwtRandomness,
+        salt: requestProofModel.salt,
+        keyClaimName: requestProofModel.keyClaimName));
+    var userAddress = jwtToAddress(
+        requestProofModel.jwt!, BigInt.parse(requestProofModel.salt));
+    // Save User Address
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userAddress', userAddress);
+
+    final decodedJWT = JwtDecoder.decode(requestProofModel.jwt!);
+    var addressSeed = genAddressSeed(BigInt.parse(requestProofModel.salt),
+        'sub', decodedJWT['sub'], decodedJWT['aud']);
+    ProofPoints proofPoints = ProofPoints.fromJson(proof['proofPoints']);
+    ZkLoginSignatureInputs zkLoginSignatureInputs = ZkLoginSignatureInputs(
+      proofPoints: proofPoints,
+      issBase64Details: Claim.fromJson(proof['issBase64Details']),
+      addressSeed: addressSeed.toString(),
+      headerBase64: proof['headerBase64'],
+    );
+    Ed25519Keypair ephemeralKeyPair = res['ephemeralKeyPair'];
+    var suiClient = SuiClient(SuiUrls.devnet);
+
+    final txb = TransactionBlock();
+    txb.setSender(userAddress);
+
+    final faucet = FaucetClient(SuiUrls.faucetDev);
+    var faucetResponse = await faucet.requestSuiFromFaucetV0(userAddress);
+
+    final sign = await txb
+        .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
+
+    final zkSign = getZkLoginSignature(ZkLoginSignature(
+        inputs: zkLoginSignatureInputs,
+        maxEpoch: int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')),
+        userSignature: base64Decode(sign.signature)));
+
+    final resp = await suiClient.executeTransactionBlock(sign.bytes, [zkSign],
+        options: SuiTransactionBlockResponseOptions(showEffects: true));
+    String zkSignature = resp.digest;
+    prefs.setString('zkSignature', zkSignature);
   }
 }

@@ -13,7 +13,6 @@ const MAX_PADDED_UNSIGNED_JWT_LEN = 64 * 25;
 
 String computeZkLoginAddressFromSeed(BigInt addressSeed, String iss) {
   final addressSeedBytesBigEndian = toBigEndianBytes(addressSeed, 32);
-  print('addressSeedBytesBigEndian: $addressSeedBytesBigEndian');
   if (iss == 'accounts.google.com') {
     iss = 'https://accounts.google.com';
   }

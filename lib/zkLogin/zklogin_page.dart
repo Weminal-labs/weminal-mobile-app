@@ -120,16 +120,7 @@ class _MyPageState extends State<MyPage> {
             return Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  var loginResRedirect = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WebViewPage(
-                          url: URL,
-                        ),
-                      ));
-
-                  requestProofModel.jwt = loginResRedirect;
-                  _handleLogin(requestProofModel, res);
+                  _handleLoginButtonClick(URL, requestProofModel, res);
                 },
                 child: const Text('Login'),
               ),
@@ -139,11 +130,7 @@ class _MyPageState extends State<MyPage> {
               child: Text('ERROR'),
             );
           } else {
-            return const SizedBox(
-              width: 60,
-              height: 60,
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
@@ -196,5 +183,19 @@ class _MyPageState extends State<MyPage> {
         options: SuiTransactionBlockResponseOptions(showEffects: true));
     String zkSignature = resp.digest;
     prefs.setString('zkSignature', zkSignature);
+  }
+
+  void _handleLoginButtonClick(
+      String URL, RequestProofModel requestProofModel, dynamic res) async {
+    var loginResRedirect = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WebViewPage(
+            url: URL,
+          ),
+        ));
+
+    requestProofModel.jwt = loginResRedirect;
+    _handleLogin(requestProofModel, res);
   }
 }

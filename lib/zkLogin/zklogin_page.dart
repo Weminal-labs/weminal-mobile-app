@@ -42,6 +42,10 @@ class _WebViewPageState extends State<WebViewPage> {
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {
+            if (error.url?.contains('account.google.com') ?? false) {
+              print('error: ${error.url}');
+              setState(() {});
+            }
             String temp = redierct.replaceAll('$REDIRECT_URL', '');
             temp = temp.substring(0, temp.indexOf('&'));
             Navigator.pop(context, temp);

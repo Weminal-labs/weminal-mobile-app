@@ -11,7 +11,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => TopicProvider()),
       ],
       child: const MaterialApp(
-        initialRoute: Routes.mainPage,
+        initialRoute: Routes.loginPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
         home: MainPage(),

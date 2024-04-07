@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1038977969048",
+    "project_id": "wenimalapp-a021c",
+    "storage_bucket": "wenimalapp-a021c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038977969048:android:2ac85310c658e97c5899ed",
+        "android_client_info": {
+          "package_name": "com.weminal.weminal_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038977969048-9h9o4nnet3pf8h4hsfukfa8c5hmsglqj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.weminal.weminal_app",
+            "certificate_hash": "e3abbe1597f4f66e90fcb1eb940fd4498084421d"
+          }
+        },
+        {
+          "client_id": "1038977969048-ub48hfvo4dicffps9l47dvios1egkrfh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZky1VMzQzVKRBiDrL0cMwexhChm4xhuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038977969048-ub48hfvo4dicffps9l47dvios1egkrfh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1038977969048-els598ih9vpgh8mguu4i4tktl1i713o9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.weminal.wenimal",
+                "app_store_id": "123456789"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

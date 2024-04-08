@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weminal_app/utilities/routes/router_manager.dart';
-import 'package:weminal_app/viewmodels/topic_provider.dart';
+import 'package:weminal_app/utilities/old_project/routes/router_manager.dart';
+import 'package:weminal_app/viewmodels/old_project/topic_provider.dart';
 import 'package:weminal_app/views/screens/detail/detail_screen.dart';
 
 void main() {

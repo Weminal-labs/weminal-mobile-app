@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:weminal_app/models/topic_model.dart';
-import 'package:weminal_app/utilities/page_response.dart';
+import 'package:weminal_app/models/old_project/topic_model.dart';
+import 'package:weminal_app/utilities/old_project/page_response.dart';
 
 class ApiService {
   static const String _token =

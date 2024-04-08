@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:weminal_app/views/home_page.dart';
-import 'package:weminal_app/views/page3.dart';
-import 'package:weminal_app/views/page4.dart';
-import 'package:weminal_app/views/topic_page.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:weminal_app/views/screens/old_project/home_page.dart';
+import 'package:weminal_app/views/screens/old_project/page3.dart';
+import 'package:weminal_app/views/screens/old_project/page4.dart';
+import 'package:weminal_app/views/screens/old_project/topic_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);

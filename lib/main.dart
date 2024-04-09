@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weminal_app/views/main_page.dart';
-import 'package:weminal_app/viewmodels/topic_provider.dart';
 import 'package:weminal_app/utilities/router_manager.dart';
+import 'package:weminal_app/viewmodels/topic_provider.dart';
+import 'package:weminal_app/views/home_page.dart';
 
 void main() {
   runApp(
@@ -14,7 +14,7 @@ void main() {
         initialRoute: Routes.mainPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
-        home: MainPage(),
+        home: HomePage(),
       ),
     ),
   );

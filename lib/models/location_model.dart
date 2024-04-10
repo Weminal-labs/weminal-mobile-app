@@ -5,43 +5,20 @@ Location locationFromJson(String str) => Location.fromJson(json.decode(str));
 String locationToJson(Location data) => json.encode(data.toJson());
 
 class Location {
-  LocationClass location;
-
-  Location({
-    required this.location,
-  });
-
-  Location copyWith({
-    LocationClass? location,
-  }) =>
-      Location(
-        location: location ?? this.location,
-      );
-
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
-        location: LocationClass.fromJson(json["location"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "location": location.toJson(),
-      };
-}
-
-class LocationClass {
   String name;
 
-  LocationClass({
+  Location({
     required this.name,
   });
 
-  LocationClass copyWith({
+  Location copyWith({
     String? name,
   }) =>
-      LocationClass(
+      Location(
         name: name ?? this.name,
       );
 
-  factory LocationClass.fromJson(Map<String, dynamic> json) => LocationClass(
+  factory Location.fromJson(Map<String, dynamic> json) => Location(
         name: json["name"],
       );
 

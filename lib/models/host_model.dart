@@ -5,23 +5,21 @@ Host hostFromJson(String str) => Host.fromJson(json.decode(str));
 String hostToJson(Host data) => json.encode(data.toJson());
 
 class Host {
-  String apiId;
+  String owner;
   String name;
-  dynamic username;
   String avatarUrl;
   String bioShort;
   String website;
-  dynamic instagramHandle;
+  String instagramHandle;
   String linkedinHandle;
-  dynamic tiktokHandle;
+  String tiktokHandle;
   String twitterHandle;
   String youtubeHandle;
   String timezone;
 
   Host({
-    required this.apiId,
+    required this.owner,
     required this.name,
-    required this.username,
     required this.avatarUrl,
     required this.bioShort,
     required this.website,
@@ -34,23 +32,21 @@ class Host {
   });
 
   Host copyWith({
-    String? apiId,
+    String? owner,
     String? name,
-    dynamic username,
     String? avatarUrl,
     String? bioShort,
     String? website,
-    dynamic instagramHandle,
+    String? instagramHandle,
     String? linkedinHandle,
-    dynamic tiktokHandle,
+    String? tiktokHandle,
     String? twitterHandle,
     String? youtubeHandle,
     String? timezone,
   }) =>
       Host(
-        apiId: apiId ?? this.apiId,
+        owner: owner ?? this.owner,
         name: name ?? this.name,
-        username: username ?? this.username,
         avatarUrl: avatarUrl ?? this.avatarUrl,
         bioShort: bioShort ?? this.bioShort,
         website: website ?? this.website,
@@ -63,9 +59,8 @@ class Host {
       );
 
   factory Host.fromJson(Map<String, dynamic> json) => Host(
-        apiId: json["api_id"],
+        owner: json["owner"],
         name: json["name"],
-        username: json["username"],
         avatarUrl: json["avatar_url"],
         bioShort: json["bio_short"],
         website: json["website"],
@@ -78,9 +73,8 @@ class Host {
       );
 
   Map<String, dynamic> toJson() => {
-        "api_id": apiId,
+        "owner": owner,
         "name": name,
-        "username": username,
         "avatar_url": avatarUrl,
         "bio_short": bioShort,
         "website": website,

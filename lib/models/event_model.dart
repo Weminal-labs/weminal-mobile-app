@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final event = eventFromJson(jsonString);
-
 import 'dart:convert';
 
 import 'package:weminal_app/models/ticket_model.dart';
@@ -14,7 +10,7 @@ Event eventFromJson(String str) => Event.fromJson(json.decode(str));
 String eventToJson(Event data) => json.encode(data.toJson());
 
 class Event {
-  String eventId;
+  String id;
   String name;
   String coverUrl;
   String createdAt;
@@ -26,7 +22,7 @@ class Event {
   Host host;
 
   Event({
-    required this.eventId,
+    required this.id,
     required this.name,
     required this.coverUrl,
     required this.createdAt,
@@ -39,7 +35,7 @@ class Event {
   });
 
   Event copyWith({
-    String? eventId,
+    String? id,
     String? name,
     String? coverUrl,
     String? createdAt,
@@ -51,7 +47,7 @@ class Event {
     Host? host,
   }) =>
       Event(
-        eventId: eventId ?? this.eventId,
+        id: id ?? this.id,
         name: name ?? this.name,
         coverUrl: coverUrl ?? this.coverUrl,
         createdAt: createdAt ?? this.createdAt,
@@ -64,7 +60,7 @@ class Event {
       );
 
   factory Event.fromJson(Map<String, dynamic> json) => Event(
-        eventId: json["event_id"],
+        id: json["id"],
         name: json["name"],
         coverUrl: json["cover_url"],
         createdAt: json["created_at"],
@@ -77,7 +73,7 @@ class Event {
       );
 
   Map<String, dynamic> toJson() => {
-        "event_id": eventId,
+        "id": id,
         "name": name,
         "cover_url": coverUrl,
         "created_at": createdAt,

@@ -66,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontSize: 36),
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   height: 65,
                   width: double.maxFinite,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -77,12 +77,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     builder: (BuildContext context, value, Widget? child) {
                       switch (value.state) {
                         case LoginState.loaded:
+                          userAddress =
+                              context.read<LoginProvider>().userAddress;
+                          String lead = userAddress.substring(2, 6);
+                          String tail =
+                              userAddress.substring(userAddress.length - 4);
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'WalletID: 123-xxx-xxx-xxx',
-                                style: TextStyle(
+                              Text(
+                                'WalletID: 0X-$lead-XXXX-$tail',
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
                                     fontWeight: FontWeight.w800),
@@ -107,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.only(top: 16),
+                    padding: const EdgeInsets.only(top: 16),
                     margin: const EdgeInsets.only(top: 10),
                     decoration: const BoxDecoration(
                       color: Colors.white,
@@ -196,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Container(
           decoration: BoxDecoration(boxShadow: const <BoxShadow>[
             BoxShadow(
-              color: Color(0xff176EF0),
+              color: Color(0xffBDBDBDFF),
               blurRadius: 22,
             ),
           ], color: Colors.white, borderRadius: BorderRadius.circular(12)),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weminal_app/views/home_page.dart';
-import 'package:weminal_app/views/page3.dart';
 import 'package:weminal_app/views/profile_page.dart';
-import 'package:weminal_app/views/topic_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -15,7 +13,7 @@ class _MainPageState extends State<MainPage> {
   /// Controller to handle PageView and also handles initial page
   final _pageController = PageController(initialPage: 0);
 
-  int maxCount = 4;
+  int maxCount = 2;
 
   @override
   void dispose() {
@@ -28,11 +26,10 @@ class _MainPageState extends State<MainPage> {
   /// widget list
   final List<Widget> bottomBarPages = [
     const HomePage(),
-    const TopicPage(),
-    const Page3(),
+    // const Page3(),
     const ProfilePage(),
   ];
-  final List<AppBar> appBarList = [
+  final List<AppBar?> appBarList = [
     AppBar(
       title: Row(
         children: [
@@ -70,21 +67,7 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
     ),
-    AppBar(
-      title: Text('Event'),
-    ),
-    AppBar(
-      title: Text('Event'),
-    ),
-    AppBar(
-      title: const Text(
-        'Profile',
-        style: TextStyle(
-            fontSize: 20,
-            color: Color(0xff5669FF),
-            fontWeight: FontWeight.w800),
-      ),
-    ),
+    null
   ];
 
   final List<IconData?> actionList = [
@@ -105,6 +88,16 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarList[_indexPage],
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        backgroundColor: Colors.lightBlue,
+        onPressed: () {},
+        child: const Icon(
+          Icons.add,
+          color: Color(0xffE5E4E4FF),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
@@ -136,12 +129,12 @@ class _MainPageState extends State<MainPage> {
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(40),
-          topLeft: Radius.circular(40),
+          topRight: Radius.elliptical(60, 60),
+          topLeft: Radius.elliptical(60, 60),
         ),
         child: BottomNavigationBar(
-          selectedFontSize: 24,
-          unselectedFontSize: 20,
+          selectedFontSize: 18,
+          unselectedFontSize: 17,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           selectedItemColor: Colors.blue,
@@ -150,17 +143,18 @@ class _MainPageState extends State<MainPage> {
           onTap: (value) {
             _changePage(value);
           },
-          items: const [
+          items: [
             BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage("assets/images/icon_home.png")),
+                icon: Container(
+                    alignment: Alignment.center,
+                    child: const ImageIcon(
+                        AssetImage("assets/images/icon_home.png"))),
                 label: 'Home'),
-            BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage("assets/images/icon_ticket.png")),
-                label: 'Home'),
-            BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage("assets/images/icon_heart.png")),
-                label: 'Home'),
-            BottomNavigationBarItem(
+            // BottomNavigationBarItem(
+            //     // icon: ImageIcon(AssetImage("assets/images/icon_heart.png")),
+            //     icon: Container(),
+            //     label: 'Home'),
+            const BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage("assets/images/icon_profile.png")),
                 label: 'Home'),
           ],

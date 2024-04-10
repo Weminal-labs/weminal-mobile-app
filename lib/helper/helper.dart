@@ -11,3 +11,9 @@ Future<String?> getUserZkSignature() async {
   String? zkSignature = prefs.getString('zkSignature');
   return zkSignature;
 }
+
+Future<String?> getUserJwt() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? userJwt = prefs.getString('userJwt');
+  return userJwt;
+}

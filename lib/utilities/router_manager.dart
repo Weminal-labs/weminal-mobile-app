@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weminal_app/views/detail_page.dart';
 import 'package:weminal_app/views/login_page.dart';
 import 'package:weminal_app/zkLogin/zklogin_page.dart';
 
@@ -7,6 +8,7 @@ import '../views/main_page.dart';
 class Routes {
   static const String mainPage = "/mainPage";
   static const String loginPage = "/";
+  static const String detailPage = '/detail';
 }
 
 class RouteGenerator {
@@ -18,6 +20,9 @@ class RouteGenerator {
       case Routes.loginPage:
         return MaterialPageRoute(
             settings: routeSettings, builder: (context) => const LoginPage());
+      case Routes.detailPage:
+        return MaterialPageRoute(
+            settings: routeSettings, builder: (context) => const DetailPage());
       default:
         return unDefinedRoute();
     }

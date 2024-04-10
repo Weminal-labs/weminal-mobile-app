@@ -135,12 +135,12 @@ class _LoginPageState extends State<LoginPage> {
             return Stack(
               children: [
                 Container(
-                  decoration: const BoxDecoration(color: Colors.white
-                      // image: DecorationImage(
-                      //   image: AssetImage('assets/images/bg_app.jpg'),
-                      //   fit: BoxFit.cover,
-                      // ),
-                      ),
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/bg_app.png'),
+                        fit: BoxFit.cover,
+                      )),
                 ),
                 Container(
                   padding: const EdgeInsets.only(

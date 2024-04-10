@@ -27,24 +27,30 @@ class LoginProvider extends ChangeNotifier {
 
   LoginState get state => _state;
 
-  Future<Map<String, String>> loadAddressAndSignature(
+  String zkSignature = '';
+  String userAddress = '';
+
+  void loadAddressAndSignature(
       String userJwt, Map<String, dynamic> resProofRequestInfo) async {
     _state = LoginState.loading;
     notifyListeners();
     Map<String, String> addressAndSignature =
-        await _handleLogin(resProofRequestInfo);
+        await _handleLogin(userJwt, resProofRequestInfo);
+    zkSignature = addressAndSignature['zkSignature']!;
+    userAddress = addressAndSignature['userAddress']!;
+
     _state = LoginState.loaded;
     notifyListeners();
-    return addressAndSignature;
   }
 
-  Future<Map<String, String>> _handleLogin(dynamic res) async {
+  Future<Map<String, String>> _handleLogin(String userJwt, dynamic res) async {
     RequestProofModel requestProofModel = RequestProofModel(
       extendedEphemeralPublicKey: res['extendedEphemeralPublicKey']!,
       maxEpoch: res['maxEpoch']!,
       jwtRandomness: res['jwtRandomness']!,
       salt: res['salt']!,
     );
+    requestProofModel.jwt = userJwt;
 
     var proof = await getProof(RequestProofModel(
         jwt: requestProofModel.jwt,

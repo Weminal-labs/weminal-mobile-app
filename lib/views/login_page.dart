@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:sui/sui.dart';
 import 'package:weminal_app/helper/helper.dart';
 import 'package:weminal_app/utilities/router_manager.dart';
+import 'package:weminal_app/viewmodels/login_provider.dart';
 import 'package:weminal_app/zkLogin/my_address.dart';
 import 'package:weminal_app/zkLogin/my_nonce.dart';
 import 'package:weminal_app/zkLogin/my_utils.dart';
@@ -402,7 +404,10 @@ class _LoginPageState extends State<LoginPage> {
     print('loginResRedirect: $loginResRedirect');
     if (loginResRedirect != null) {
       requestProofModel.jwt = loginResRedirect;
-      _handleLogin(requestProofModel, res);
+      // _handleLogin(requestProofModel, res);
+      context
+          .read<LoginProvider>()
+          .loadAddressAndSignature(loginResRedirect, res);
     }
   }
 

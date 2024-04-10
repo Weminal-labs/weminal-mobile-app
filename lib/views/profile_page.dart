@@ -2,11 +2,27 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:weminal_app/viewmodels/login_provider.dart';
 
+import '../states/login_state.dart';
 import '../widget/stack_widget.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String userAddress = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,30 +68,41 @@ class ProfilePage extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 40),
                   height: 65,
+                  width: double.maxFinite,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   decoration: BoxDecoration(
                       color: const Color(0xff5669FF).withOpacity(0.31),
                       borderRadius: BorderRadius.circular(12)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'WalletID: 123-xxx-xxx-xxx',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const ImageIcon(
-                            AssetImage('assets/images/icon_copy.png'),
-                            color: Color(0xff5669FF),
-                          ))
-                    ],
+                  child: Consumer<LoginProvider>(
+                    builder: (BuildContext context, value, Widget? child) {
+                      switch (value.state) {
+                        case LoginState.loaded:
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'WalletID: 123-xxx-xxx-xxx',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const ImageIcon(
+                                    AssetImage('assets/images/icon_copy.png'),
+                                    color: Color(0xff5669FF),
+                                  ))
+                            ],
+                          );
+                        default:
+                          return LoadingAnimationWidget.prograssiveDots(
+                              color: Colors.white, size: 150);
+                      }
+                    },
                   ),
                 ),
                 Expanded(

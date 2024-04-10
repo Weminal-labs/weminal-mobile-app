@@ -14,7 +14,6 @@ void main() {
         initialRoute: Routes.loginPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
-        home: MainPage(),
       ),
     ),
   );

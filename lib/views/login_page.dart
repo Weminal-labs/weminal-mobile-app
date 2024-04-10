@@ -6,6 +6,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:sui/sui.dart';
 import 'package:weminal_app/helper/helper.dart';
+import 'package:weminal_app/utilities/router_manager.dart';
 import 'package:weminal_app/zkLogin/my_address.dart';
 import 'package:weminal_app/zkLogin/my_nonce.dart';
 import 'package:weminal_app/zkLogin/my_utils.dart';
@@ -216,9 +217,17 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 80.0),
                       OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           // login with google
-                          _handleLoginButtonClick(URL, requestProofModel, res);
+                          try {
+                            await _handleLoginButtonClick(
+                                URL, requestProofModel, res);
+                          } catch (e) {
+                            print('Exception');
+
+                            throw Exception(e.toString());
+                          }
+                          _goToMainPage();
                         },
                         style: OutlinedButton.styleFrom(
                             foregroundColor:
@@ -373,7 +382,7 @@ class _LoginPageState extends State<LoginPage> {
     prefs.setString('zkSignature', zkSignature);
   }
 
-  void _handleLoginButtonClick(
+  Future<void> _handleLoginButtonClick(
       String URL, RequestProofModel requestProofModel, dynamic res) async {
     var loginResRedirect = await Navigator.push(
         context,
@@ -385,5 +394,9 @@ class _LoginPageState extends State<LoginPage> {
 
     requestProofModel.jwt = loginResRedirect;
     _handleLogin(requestProofModel, res);
+  }
+
+  void _goToMainPage() {
+    Navigator.pushReplacementNamed(context, Routes.mainPage);
   }
 }

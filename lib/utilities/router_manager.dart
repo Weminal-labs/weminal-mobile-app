@@ -5,17 +5,19 @@ import 'package:weminal_app/zkLogin/zklogin_page.dart';
 import '../views/main_page.dart';
 
 class Routes {
-  static const String mainPage = "/";
-  static const String loginPage = "/login";
+  static const String mainPage = "/mainPage";
+  static const String loginPage = "/";
 }
 
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case Routes.mainPage:
-        return MaterialPageRoute(builder: (context) => const MainPage());
+        return MaterialPageRoute(
+            settings: routeSettings, builder: (context) => const MainPage());
       case Routes.loginPage:
-        return MaterialPageRoute(builder: (context) => const LoginPage());
+        return MaterialPageRoute(
+            settings: routeSettings, builder: (context) => const LoginPage());
       default:
         return unDefinedRoute();
     }

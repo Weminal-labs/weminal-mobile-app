@@ -3,7 +3,6 @@ import 'package:weminal_app/views/home_page.dart';
 import 'package:weminal_app/views/page3.dart';
 import 'package:weminal_app/views/page4.dart';
 import 'package:weminal_app/views/topic_page.dart';
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -33,7 +32,54 @@ class _MainPageState extends State<MainPage> {
     const Page3(),
     const Page4(),
   ];
-  final List<String> topicString = ['Home', 'Topic', 'Folder', 'User Setting'];
+  final List<AppBar> appBarList = [
+    AppBar(
+      title: Row(
+        children: [
+          const Text('Event'),
+          const SizedBox(
+            width: 16,
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: 52,
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                  color: const Color(0xffF3F8FE),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: const Color(0xffF3F8FE), width: 1)),
+              child: const Row(
+                children: [
+                  Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                    size: 20,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                      child: TextField(
+                    decoration: InputDecoration(border: InputBorder.none),
+                  ))
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+    AppBar(
+      title: Text('Event'),
+    ),
+    AppBar(
+      title: Text('Event'),
+    ),
+    AppBar(
+      title: Text('Event'),
+    ),
+  ];
 
   final List<IconData?> actionList = [
     null,
@@ -43,7 +89,7 @@ class _MainPageState extends State<MainPage> {
   ];
 
   final List<IconData> iconList = [
-    Icons.home,
+    Icons.home_filled,
     Icons.topic,
     Icons.folder_outlined,
     Icons.person
@@ -52,33 +98,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          topicString[_indexPage],
-          style: const TextStyle(
-              fontWeight: FontWeight.bold, fontFamily: 'Pacifico'),
-        ),
-        centerTitle: true,
-        elevation: 4,
-        shadowColor: Colors.grey,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: actionList[_indexPage] != null
-                ? Icon(actionList[_indexPage])
-                : null,
-          )
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        onPressed: () {
-          _showAddBottomPopup();
-        },
-        child: const Icon(Icons.add),
-      ),
+      appBar: appBarList[_indexPage],
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
@@ -86,68 +106,8 @@ class _MainPageState extends State<MainPage> {
             bottomBarPages.length, (index) => bottomBarPages[index]),
       ),
       extendBody: true,
-      bottomNavigationBar: (bottomBarPages.length <= maxCount)
-          ? AnimatedBottomNavigationBar.builder(
-              height: 80,
-              tabBuilder: (int index, bool isActive) {
-                return Icon(
-                  iconList[index],
-                  size: 24,
-                  color: isActive ? Colors.green : Colors.grey,
-                );
-              },
-              activeIndex: _indexPage,
-              gapLocation: GapLocation.center,
-              notchSmoothness: NotchSmoothness.softEdge,
-              leftCornerRadius: 24,
-              rightCornerRadius: 24,
-              onTap: (index) => _changePage(index),
-              itemCount: iconList.length,
-              //other params
-            )
-          : null,
-    );
-  }
-
-  void _showAddBottomPopup() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 200,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            color: Colors.amber,
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ElevatedButton(
-                    child: const Text('Topic'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ElevatedButton(
-                    child: const Text('Folder'),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      bottomNavigationBar:
+          (bottomBarPages.length <= maxCount) ? _buildBottomNav() : null,
     );
   }
 
@@ -158,43 +118,48 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  void _showAddTopicBottomPopup() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 200,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            color: Colors.amber,
+  Widget _buildBottomNav() {
+    return Container(
+      decoration: const BoxDecoration(
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Color(0xffdedede),
+            blurRadius: 22,
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ElevatedButton(
-                    child: const Text('Topic'),
-                    onPressed: () {},
-                  ),
-                ),
-                Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ElevatedButton(
-                    child: const Text('Folder'),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(40),
+          topLeft: Radius.circular(40),
+        ),
+        child: BottomNavigationBar(
+          selectedFontSize: 24,
+          unselectedFontSize: 20,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
+          currentIndex: _indexPage,
+          onTap: (value) {
+            _changePage(value);
+          },
+          items: const [
+            BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage("assets/images/icon_home.png")),
+                label: 'Home'),
+            BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage("assets/images/icon_ticket.png")),
+                label: 'Home'),
+            BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage("assets/images/icon_heart.png")),
+                label: 'Home'),
+            BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage("assets/images/icon_profile.png")),
+                label: 'Home'),
+          ],
+        ),
+      ),
     );
   }
 }

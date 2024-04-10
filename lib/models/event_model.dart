@@ -14,16 +14,16 @@ Event eventFromJson(String str) => Event.fromJson(json.decode(str));
 String eventToJson(Event data) => json.encode(data.toJson());
 
 class Event {
-  String eventId;
-  String name;
-  String coverUrl;
-  String createdAt;
-  String startAt;
-  String endAt;
-  Location location;
-  String timezone;
-  Ticket ticket;
-  Host host;
+  String? eventId;
+  String? name;
+  String? coverUrl;
+  String? createdAt;
+  String? startAt;
+  String? endAt;
+  Location? location;
+  String? timezone;
+  Ticket? ticket;
+  Host? host;
 
   Event({
     required this.eventId,
@@ -83,9 +83,9 @@ class Event {
         "created_at": createdAt,
         "start_at": startAt,
         "end_at": endAt,
-        "location": location.toJson(),
+        "location": location?.toJson(),
         "timezone": timezone,
-        "ticket": ticket.toJson(),
-        "host": host.toJson(),
+        "ticket": ticket?.toJson(),
+        "host": host?.toJson(),
       };
 }

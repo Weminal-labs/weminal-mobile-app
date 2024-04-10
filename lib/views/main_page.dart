@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weminal_app/views/home_page.dart';
+import 'package:weminal_app/views/detail_page.dart';
 import 'package:weminal_app/views/page3.dart';
 import 'package:weminal_app/views/page4.dart';
 import 'package:weminal_app/views/topic_page.dart';

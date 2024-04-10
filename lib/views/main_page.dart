@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weminal_app/views/home_page.dart';
 import 'package:weminal_app/views/page3.dart';
-import 'package:weminal_app/views/page4.dart';
+import 'package:weminal_app/views/profile_page.dart';
 import 'package:weminal_app/views/topic_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -30,7 +30,7 @@ class _MainPageState extends State<MainPage> {
     const HomePage(),
     const TopicPage(),
     const Page3(),
-    const Page4(),
+    const ProfilePage(),
   ];
   final List<AppBar> appBarList = [
     AppBar(
@@ -77,7 +77,13 @@ class _MainPageState extends State<MainPage> {
       title: Text('Event'),
     ),
     AppBar(
-      title: Text('Event'),
+      title: const Text(
+        'Profile',
+        style: TextStyle(
+            fontSize: 20,
+            color: Color(0xff5669FF),
+            fontWeight: FontWeight.w800),
+      ),
     ),
   ];
 

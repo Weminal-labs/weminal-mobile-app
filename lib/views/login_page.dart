@@ -28,6 +28,7 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
+  bool isLoading = false;
   String REDIRECT_URL = 'http://localhost:3000/#id_token=';
   var redierct = '';
   WebViewController getWebViewController(BuildContext context) {
@@ -43,9 +44,14 @@ class _WebViewPageState extends State<WebViewPage> {
           onPageStarted: (String url) {},
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {
+            setState(() {
+              isLoading = true;
+            });
             if (error.url?.contains('account.google.com') ?? false) {
               print('error: ${error.url}');
-              setState(() {});
+              setState(() {
+                isLoading = false;
+              });
             }
             String temp = redierct.replaceAll('$REDIRECT_URL', '');
             temp = temp.substring(0, temp.indexOf('&'));
@@ -67,9 +73,11 @@ class _WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Flutter Simple Example')),
-      body: WebViewWidget(
-        controller: getWebViewController(context),
-      ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : WebViewWidget(
+              controller: getWebViewController(context),
+            ),
     );
   }
 }
@@ -125,12 +133,12 @@ class _LoginPageState extends State<LoginPage> {
             return Stack(
               children: [
                 Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/bg_app.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  decoration: const BoxDecoration(color: Colors.white
+                      // image: DecorationImage(
+                      //   image: AssetImage('assets/images/bg_app.jpg'),
+                      //   fit: BoxFit.cover,
+                      // ),
+                      ),
                 ),
                 Container(
                   padding: const EdgeInsets.only(
@@ -391,9 +399,11 @@ class _LoginPageState extends State<LoginPage> {
             url: URL,
           ),
         ));
-
-    requestProofModel.jwt = loginResRedirect;
-    _handleLogin(requestProofModel, res);
+    print('loginResRedirect: $loginResRedirect');
+    if (loginResRedirect != null) {
+      requestProofModel.jwt = loginResRedirect;
+      _handleLogin(requestProofModel, res);
+    }
   }
 
   void _goToMainPage() {

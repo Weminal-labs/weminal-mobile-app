@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weminal_app/utilities/router_manager.dart';
 
@@ -10,82 +9,87 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 34.0, top: 20),
-            child: Text(
-              'Event latest',
-              style: TextStyle(
-                  color: Color(0xff5669FF),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800),
-            ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 34.0, top: 20),
+                child: Text(
+                  'Event latest',
+                  style: TextStyle(
+                      color: Color(0xff5669FF),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800),
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              CarouselSlider.builder(
+                itemCount: 15,
+                itemBuilder:
+                    (BuildContext context, int itemIndex, int pageViewIndex) =>
+                        _buildCarouseItem(context),
+                options: CarouselOptions(
+                  height: 340,
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 0.8,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  reverse: false,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
+                  enlargeFactor: 0.3,
+                  scrollDirection: Axis.horizontal,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 34.0, top: 20),
+                child: Text(
+                  'Event joined',
+                  style: TextStyle(
+                      color: Color(0xff5669FF),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800),
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              CarouselSlider.builder(
+                itemCount: 15,
+                itemBuilder:
+                    (BuildContext context, int itemIndex, int pageViewIndex) =>
+                        _buildCarouseItem(context),
+                options: CarouselOptions(
+                  height: 340,
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 0.8,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  reverse: false,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
+                  enlargeFactor: 0.3,
+                  scrollDirection: Axis.horizontal,
+                ),
+              ),
+              const SizedBox(
+                height: 120,
+              )
+            ],
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          CarouselSlider.builder(
-            itemCount: 15,
-            itemBuilder:
-                (BuildContext context, int itemIndex, int pageViewIndex) =>
-                    _buildCarouseItem(context),
-            options: CarouselOptions(
-              height: 340,
-              aspectRatio: 16 / 9,
-              viewportFraction: 0.8,
-              initialPage: 0,
-              enableInfiniteScroll: true,
-              reverse: false,
-              autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 3),
-              autoPlayAnimationDuration: const Duration(milliseconds: 800),
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enlargeCenterPage: true,
-              enlargeFactor: 0.3,
-              scrollDirection: Axis.horizontal,
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 34.0, top: 20),
-            child: Text(
-              'Event joined',
-              style: TextStyle(
-                  color: Color(0xff5669FF),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800),
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          CarouselSlider.builder(
-            itemCount: 15,
-            itemBuilder:
-                (BuildContext context, int itemIndex, int pageViewIndex) =>
-                    _buildCarouseItem(context),
-            options: CarouselOptions(
-              height: 340,
-              aspectRatio: 16 / 9,
-              viewportFraction: 0.8,
-              initialPage: 0,
-              enableInfiniteScroll: true,
-              reverse: false,
-              autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 3),
-              autoPlayAnimationDuration: const Duration(milliseconds: 800),
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enlargeCenterPage: true,
-              enlargeFactor: 0.3,
-              scrollDirection: Axis.horizontal,
-            ),
-          ),
-          const SizedBox(
-            height: 120,
-          )
-        ],
+        ),
       ),
     );
   }

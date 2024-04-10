@@ -46,7 +46,7 @@ class LoginProvider extends ChangeNotifier {
   Future<Map<String, String>> _handleLogin(String userJwt, dynamic res) async {
     RequestProofModel requestProofModel = RequestProofModel(
       extendedEphemeralPublicKey: res['extendedEphemeralPublicKey']!,
-      maxEpoch: res['maxEpoch']!,
+      maxEpoch: res['maxEpoch']!.toString().replaceAll('.0', ''),
       jwtRandomness: res['jwtRandomness']!,
       salt: res['salt']!,
     );
@@ -97,6 +97,13 @@ class LoginProvider extends ChangeNotifier {
 
   Future<Map<String, dynamic>> getProof(
       RequestProofModel requestProofModel) async {
+    print('requestProofModel.maxEpoch: ${requestProofModel.maxEpoch}');
+    print(
+        'requestProofModel.jwtRandomness: ${requestProofModel.jwtRandomness}');
+    print('requestProofModel.salt: ${requestProofModel.salt}');
+    print('requestProofModel.keyClaimName: ${requestProofModel.keyClaimName}');
+    print('requestProofModel.toJson(): ${requestProofModel.toJson()}');
+
     var res = await http.post(Uri.parse('https://prover-dev.mystenlabs.com/v1'),
         headers: headers, body: jsonEncode(requestProofModel.toJson()));
     if (res.statusCode == 200) {

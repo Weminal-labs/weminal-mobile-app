@@ -5,36 +5,15 @@ Ticket ticketFromJson(String str) => Ticket.fromJson(json.decode(str));
 String ticketToJson(Ticket data) => json.encode(data.toJson());
 
 class Ticket {
-  TicketClass ticket;
-
-  Ticket({
-    required this.ticket,
-  });
-
-  Ticket copyWith({
-    TicketClass? ticket,
-  }) =>
-      Ticket(
-        ticket: ticket ?? this.ticket,
-      );
-
-  factory Ticket.fromJson(Map<String, dynamic> json) => Ticket(
-        ticket: TicketClass.fromJson(json["ticket"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "ticket": ticket.toJson(),
-      };
-}
-
-class TicketClass {
-  dynamic price;
+  int total;
+  int price;
   bool isSoldOut;
-  dynamic spotsRemaining;
+  int spotsRemaining;
   bool isNearCapacity;
   String ticketCurrency;
 
-  TicketClass({
+  Ticket({
+    required this.total,
     required this.price,
     required this.isSoldOut,
     required this.spotsRemaining,
@@ -42,14 +21,16 @@ class TicketClass {
     required this.ticketCurrency,
   });
 
-  TicketClass copyWith({
-    dynamic price,
+  Ticket copyWith({
+    int? total,
+    int? price,
     bool? isSoldOut,
-    dynamic spotsRemaining,
+    int? spotsRemaining,
     bool? isNearCapacity,
     String? ticketCurrency,
   }) =>
-      TicketClass(
+      Ticket(
+        total: total ?? this.total,
         price: price ?? this.price,
         isSoldOut: isSoldOut ?? this.isSoldOut,
         spotsRemaining: spotsRemaining ?? this.spotsRemaining,
@@ -57,7 +38,8 @@ class TicketClass {
         ticketCurrency: ticketCurrency ?? this.ticketCurrency,
       );
 
-  factory TicketClass.fromJson(Map<String, dynamic> json) => TicketClass(
+  factory Ticket.fromJson(Map<String, dynamic> json) => Ticket(
+        total: json["total"],
         price: json["price"],
         isSoldOut: json["is_sold_out"],
         spotsRemaining: json["spots_remaining"],
@@ -66,6 +48,7 @@ class TicketClass {
       );
 
   Map<String, dynamic> toJson() => {
+        "total": total,
         "price": price,
         "is_sold_out": isSoldOut,
         "spots_remaining": spotsRemaining,

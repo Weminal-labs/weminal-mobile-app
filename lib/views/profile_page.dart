@@ -1,7 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:weminal_app/viewmodels/login_provider.dart';
@@ -124,30 +122,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ListTile(
-                          leading: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: const Color(0xffD6E6F2),
-                                borderRadius: BorderRadius.circular(12)),
-                            child: const ImageIcon(
-                              AssetImage('assets/images/icon_setting.png'),
-                              color: Colors.black,
-                              size: 40,
-                            ),
-                          ),
-                          title: const Text(
-                            'Export keys',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w800),
-                          ),
-                          trailing: const Icon(
-                            Icons.navigate_next,
-                            color: Colors.black,
-                            size: 32,
-                          ),
-                        ),
                         const Padding(
                           padding: EdgeInsets.only(left: 20.0, top: 20),
                           child: Text(

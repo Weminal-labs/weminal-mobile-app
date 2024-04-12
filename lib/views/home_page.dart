@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
       "location": {"name": "Ho Chi Minh city"},
       "timezone": "Europe/London",
       "ticket": {
+        "total": 5,
         "price": 0,
         "is_sold_out": false,
         "spots_remaining": 0,
@@ -46,16 +47,49 @@ class _HomePageState extends State<HomePage> {
         "youtube_handle": "Sui-Network",
         "timezone": "Asia/Manila"
       }
-    }
+    },
+    {
+      "id": "evt-AipW3EfmGB81vDC",
+      "name": "Introduction XXXXXXXX",
+      "cover_url":
+          "https://images.lumacdn.com/event-covers/uk/29286153-12c1-4d8b-9c36-b838840115bd",
+      "created_at": "2024-03-12T01:41:30.679Z",
+      "start_at": "2024-03-21T12:00:00.000Z",
+      "end_at": "2024-03-21T13:00:00.000Z",
+      "location": {"name": "Ho Chi Minh city"},
+      "timezone": "Europe/London",
+      "ticket": {
+        "total": 5,
+        "price": 0,
+        "is_sold_out": false,
+        "spots_remaining": 0,
+        "is_near_capacity": false,
+        "ticket_currency": "usd"
+      },
+      "host": {
+        "owner": "usr-eov0TQqLezYv8WO",
+        "name": "Sui Foundation",
+        "avatar_url":
+            "https://images.lumacdn.com/avatars/79/26309b69-c772-47bd-8659-f4b2e9ca073e",
+        "bio_short":
+            "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
+        "website": "https://sui.io/",
+        "instagram_handle": "",
+        "linkedin_handle": "/company/sui-foundation",
+        "tiktok_handle": "",
+        "twitter_handle": "suinetwork",
+        "youtube_handle": "Sui-Network",
+        "timezone": "Asia/Manila"
+      }
+    },
     // 13 more events
   ];
-
+  final List<Event> eventList = [];
   @override
   Widget build(BuildContext context) {
     for (Map<String, dynamic> m in json) {
-      print(m);
       Event e = Event.fromJson(m);
-      print(e);
+      eventList.add(e);
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -78,10 +112,10 @@ class _HomePageState extends State<HomePage> {
                 height: 8,
               ),
               CarouselSlider.builder(
-                itemCount: 15,
+                itemCount: eventList.length,
                 itemBuilder:
                     (BuildContext context, int itemIndex, int pageViewIndex) =>
-                        _buildCarouseItem(context),
+                        _buildCarouseItem(context, itemIndex),
                 options: CarouselOptions(
                   height: 340,
                   aspectRatio: 16 / 9,
@@ -112,10 +146,10 @@ class _HomePageState extends State<HomePage> {
                 height: 8,
               ),
               CarouselSlider.builder(
-                itemCount: 15,
+                itemCount: eventList.length,
                 itemBuilder:
                     (BuildContext context, int itemIndex, int pageViewIndex) =>
-                        _buildCarouseItem(context),
+                        _buildCarouseItem(context, itemIndex),
                 options: CarouselOptions(
                   height: 340,
                   aspectRatio: 16 / 9,
@@ -180,7 +214,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCarouseItem(BuildContext context) {
+  Widget _buildCarouseItem(BuildContext context, int itemIndex) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, Routes.detailPage);
@@ -215,9 +249,9 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 8,
                 ),
-                const Text(
-                  'Internation Band Mu...',
-                  style: TextStyle(
+                Text(
+                  eventList[itemIndex].name,
+                  style: const TextStyle(
                       fontFamily: "Oswald",
                       fontSize: 18,
                       fontWeight: FontWeight.w600,

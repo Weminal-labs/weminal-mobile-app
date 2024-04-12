@@ -78,6 +78,16 @@ class LoginProvider extends ChangeNotifier {
 
     final txb = TransactionBlock();
     txb.setSender(userAddress);
+    const packageObjectId =
+        '0x51f4a1e3bda48c305656d3bfb46db227a2029fdf5e738af341e3a29118d089ca';
+    txb.moveCall('$packageObjectId::event::new_ticket', arguments: [
+      txb.pureString('name ticket 1'),
+      txb.pureString('des ticket 1'),
+      txb.pureString(
+          'https://coinz.com.vn/wp-content/uploads/2022/10/sui-blockchain-thumbnail.webp'),
+      txb.pure(
+          '0x51f4a1e3bda48c305656d3bfb46db227a2029fdf5e738af341e3a29118d089ca')
+    ]);
 
     final faucet = FaucetClient(SuiUrls.faucetDev);
     var faucetResponse = await faucet.requestSuiFromFaucetV0(userAddress);
@@ -98,16 +108,6 @@ class LoginProvider extends ChangeNotifier {
     //test move call
     var bytes = sign.bytes;
     print('zkSignature: $zkSignature');
-    const packageObjectId =
-        '0x51f4a1e3bda48c305656d3bfb46db227a2029fdf5e738af341e3a29118d089ca';
-    txb.moveCall('$packageObjectId::event::new_ticket', arguments: [
-      txb.pureString('name ticket 1'),
-      txb.pureString('des ticket 1'),
-      txb.pureString(
-          'https://coinz.com.vn/wp-content/uploads/2022/10/sui-blockchain-thumbnail.webp'),
-      txb.pure(
-          '0x51f4a1e3bda48c305656d3bfb46db227a2029fdf5e738af341e3a29118d089ca')
-    ]);
     var serializedSignature = parseSerializedSignature(zkSign);
     print('serializedSignature: ${serializedSignature}');
 

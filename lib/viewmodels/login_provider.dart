@@ -5,6 +5,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:sui/builder/transaction_block.dart';
 import 'package:sui/cryptography/ed25519_keypair.dart';
 import 'package:sui/rpc/faucet_client.dart';
+import 'package:sui/sui.dart';
 import 'package:sui/sui_client.dart';
 import 'package:sui/sui_urls.dart';
 import 'package:sui/types/transactions.dart';
@@ -84,6 +85,8 @@ class LoginProvider extends ChangeNotifier {
     final sign = await txb
         .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
 
+    print('sign.signature: ${sign.signature}');
+
     final zkSign = getZkLoginSignature(ZkLoginSignature(
         inputs: zkLoginSignatureInputs,
         maxEpoch: int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')),
@@ -92,6 +95,34 @@ class LoginProvider extends ChangeNotifier {
     final resp = await suiClient.executeTransactionBlock(sign.bytes, [zkSign],
         options: SuiTransactionBlockResponseOptions(showEffects: true));
     String zkSignature = resp.digest;
+    //test move call
+    var bytes = sign.bytes;
+    print('zkSignature: $zkSignature');
+    const packageObjectId =
+        '0x51f4a1e3bda48c305656d3bfb46db227a2029fdf5e738af341e3a29118d089ca';
+    txb.moveCall('$packageObjectId::event::new_ticket', arguments: [
+      txb.pureString('name ticket 1'),
+      txb.pureString('des ticket 1'),
+      txb.pureString(
+          'https://coinz.com.vn/wp-content/uploads/2022/10/sui-blockchain-thumbnail.webp'),
+      txb.pure(
+          '0x51f4a1e3bda48c305656d3bfb46db227a2029fdf5e738af341e3a29118d089ca')
+    ]);
+    var serializedSignature = parseSerializedSignature(zkSign);
+    print('serializedSignature: ${serializedSignature}');
+
+    base64Decode(zkSign).toList();
+    List<String> tepm =
+        base64Decode(zkSign).toList().map((e) => e.toString()).toList();
+    print('base64Decode(zkSign): ${base64Decode(zkSign)}');
+    var txbres = await suiClient.executeTransactionBlock(
+      sign.bytes,
+      [zkSign],
+    );
+    print('txbres: ${txbres.digest}');
+
+    //
+    print('userAdrress: $userAddress');
     return {'userAddress': userAddress, 'zkSignature': zkSignature};
   }
 

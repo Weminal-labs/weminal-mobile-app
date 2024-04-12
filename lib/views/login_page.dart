@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -375,7 +376,7 @@ class _LoginPageState extends State<LoginPage> {
     final txb = TransactionBlock();
     txb.setSender(userAddress);
 
-    final faucet = FaucetClient(SuiUrls.faucetDev);
+    final faucet = FaucetClient(SuiUrls.faucetTest);
     var faucetResponse = await faucet.requestSuiFromFaucetV0(userAddress);
 
     final sign = await txb
@@ -390,6 +391,7 @@ class _LoginPageState extends State<LoginPage> {
         options: SuiTransactionBlockResponseOptions(showEffects: true));
     String zkSignature = resp.digest;
     prefs.setString('zkSignature', zkSignature);
+    print('zkSignature: $zkSignature');
   }
 
   Future<void> _handleLoginButtonClick(

@@ -90,10 +90,24 @@ class LoginProvider extends ChangeNotifier {
     //     ephemeralKeyPair: ephemeralKeyPair,
     //     senderAddress: userAddress,
     //     balances: 100000000);
+    // print('getNft');
+    // var nfts = await getNfts(userAddress);
+    // print('nfts: $nfts');
+    // var nft = nfts[0];
+    // print('nft Info');
+    // print('digest: ${nft.data!.digest}');
+    // print('objectId: ${nft.data!.objectId}');
+    // print('version: ${nft.data!.version}');
+    // print('objectType: ${nft.data!.type}');
+    //
+    // String myUrl = await ZkSendLinkBuilder.createLinkObject(
+    //     ephemeralKeyPair: ephemeralKeyPair,
+    //     senderAddress: userAddress,
+    //     suiObjectRef: SuiObjectRef(
+    //         nft.data!.digest, nft.data!.objectId, nft.data!.version),
+    //     objectType: nft.data!.type!);
     // print('myUrl: $myUrl');
     print('userAdrress: $userAddress');
-    print('getObjectFields');
-    getObjects(userAddress);
     return {
       'userAddress': userAddress,
     };
@@ -120,14 +134,17 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getObjects(String userAddress) async {
-    final objects = await suiClient.getOwnedObjects(userAddress);
-    objects.data.forEach((element) {
-      print('objectID ${element.data?.objectId}');
-      print('type ${element.data?.type}');
-      print('version ${element.data?.version}');
-      print('digest ${element.data?.digest}');
-    });
+  Future<List<SuiObjectResponse>> getNfts(String userAddress) async {
+    final objects = await suiClient.getOwnedObjects(userAddress,
+        options: SuiObjectDataOptions(showType: true));
+
+    List<SuiObjectResponse> nfts =
+        objects.data.where((e) => !isCoinType(e.data?.type)).toList();
+    return nfts;
+  }
+
+  bool isCoinType(String? type) {
+    return type == '0x2::coin::Coin<0x2::sui::SUI>';
   }
 
   Future<void> getEvents() async {

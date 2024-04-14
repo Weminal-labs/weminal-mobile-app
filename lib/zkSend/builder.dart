@@ -55,8 +55,9 @@ class ZkSendLinkBuilder {
     required SuiObjectRef suiObjectRef,
     required String objectType,
   }) async {
-    ZkBag contract = ZkBag(package: MAINNET_IDS.packageId);
     final txb = TransactionBlock();
+
+    ZkBag contract = ZkBag(package: MAINNET_IDS.packageId);
     txb.setSender(senderAddress);
     var receive = SuiAccount.ed25519Account();
     //new

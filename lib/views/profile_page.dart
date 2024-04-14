@@ -80,6 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           String lead = userAddress.substring(2, 6);
                           String tail =
                               userAddress.substring(userAddress.length - 4);
+                          context.read<LoginProvider>().getObjects(userAddress);
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

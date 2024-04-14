@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weminal_app/views/detail_page.dart';
 import 'package:weminal_app/views/login_page.dart';
-import 'package:weminal_app/zkLogin/zklogin_page.dart';
-
 import '../views/main_page.dart';
 
 class Routes {

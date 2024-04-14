@@ -104,18 +104,6 @@ class _LoginPageState extends State<LoginPage> {
     "Accept": "application/json",
   };
 
-  Future<Map<String, dynamic>> getProof(
-      RequestProofModel requestProofModel) async {
-    var res = await http.post(Uri.parse('https://prover-dev.mystenlabs.com/v1'),
-        headers: headers, body: jsonEncode(requestProofModel.toJson()));
-    if (res.statusCode == 200) {
-      Map<String, dynamic> response = jsonDecode(res.body);
-      return response;
-    } else {
-      throw Exception("Load page fail ${res.statusCode}");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -343,55 +331,6 @@ class _LoginPageState extends State<LoginPage> {
         },
       ),
     );
-  }
-
-  void _handleLogin(RequestProofModel requestProofModel, dynamic res) async {
-    var proof = await getProof(RequestProofModel(
-        jwt: requestProofModel.jwt,
-        extendedEphemeralPublicKey:
-            requestProofModel.extendedEphemeralPublicKey,
-        maxEpoch: requestProofModel.maxEpoch,
-        jwtRandomness: requestProofModel.jwtRandomness,
-        salt: requestProofModel.salt,
-        keyClaimName: requestProofModel.keyClaimName));
-    var userAddress = jwtToAddress(
-        requestProofModel.jwt!, BigInt.parse(requestProofModel.salt));
-    // Save User Address
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userAddress', userAddress);
-
-    final decodedJWT = JwtDecoder.decode(requestProofModel.jwt!);
-    var addressSeed = genAddressSeed(BigInt.parse(requestProofModel.salt),
-        'sub', decodedJWT['sub'], decodedJWT['aud']);
-    ProofPoints proofPoints = ProofPoints.fromJson(proof['proofPoints']);
-    ZkLoginSignatureInputs zkLoginSignatureInputs = ZkLoginSignatureInputs(
-      proofPoints: proofPoints,
-      issBase64Details: Claim.fromJson(proof['issBase64Details']),
-      addressSeed: addressSeed.toString(),
-      headerBase64: proof['headerBase64'],
-    );
-    Ed25519Keypair ephemeralKeyPair = res['ephemeralKeyPair'];
-    var suiClient = SuiClient(SuiUrls.devnet);
-
-    final txb = TransactionBlock();
-    txb.setSender(userAddress);
-
-    final faucet = FaucetClient(SuiUrls.faucetTest);
-    var faucetResponse = await faucet.requestSuiFromFaucetV0(userAddress);
-
-    final sign = await txb
-        .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
-
-    final zkSign = getZkLoginSignature(ZkLoginSignature(
-        inputs: zkLoginSignatureInputs,
-        maxEpoch: int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')),
-        userSignature: base64Decode(sign.signature)));
-
-    final resp = await suiClient.executeTransactionBlock(sign.bytes, [zkSign],
-        options: SuiTransactionBlockResponseOptions(showEffects: true));
-    String zkSignature = resp.digest;
-    prefs.setString('zkSignature', zkSignature);
-    print('zkSignature: $zkSignature');
   }
 
   Future<void> _handleLoginButtonClick(

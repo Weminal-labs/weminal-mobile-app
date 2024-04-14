@@ -75,7 +75,7 @@ Future<Map<String, dynamic>> getInfoRequestProof() async {
   final eph_public_key_0 = publicKeyBytes ~/ BigInt.from(2).pow(128);
   final eph_public_key_1 = publicKeyBytes % BigInt.from(2).pow(128);
 
-  SuiClient client = SuiClient(SuiUrls.devnet);
+  SuiClient client = SuiClient(SuiUrls.mainnet);
 
   var getEpoch = await client.getLatestSuiSystemState();
 
@@ -96,6 +96,7 @@ Future<Map<String, dynamic>> getInfoRequestProof() async {
     throw new Exception(
         'Length of nonce $nonce (${nonce.length}) is not equal to $NONCE_LENGTH');
   }
+  print('mynonce: $nonce');
   return {
     'extendedEphemeralPublicKey': extendedEphemeralPublicKey,
     'maxEpoch': maxEpoch.toString(),

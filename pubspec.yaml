@@ -45,6 +45,8 @@ dependencies:
    carousel_slider: ^4.2.1
    loading_animation_widget: ^1.2.1
    pretty_qr_code: ^3.3.0
+   dart_bech32: ^2.0.0
+
 
 dev_dependencies:
    flutter_test:

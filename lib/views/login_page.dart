@@ -121,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
               jwtRandomness: res['jwtRandomness']!,
               salt: res['salt']!,
             );
+            print('ephemeralPrivateKey: ${res['ephemeralPrivateKey']}');
             return Stack(
               children: [
                 Container(

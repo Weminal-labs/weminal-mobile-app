@@ -50,8 +50,7 @@ class ZkSendLinkBuilder {
   static final Ed25519Keypair keypair = Ed25519Keypair();
 
   static Future<String> createLinkObject({
-    required String bytes,
-    required String zkSign,
+    required Keypair ephemeralKeyPair,
     required String senderAddress,
     required SuiObjectRef suiObjectRef,
     required String objectType,
@@ -73,14 +72,16 @@ class ZkSendLinkBuilder {
     contract.add(txb,
         arguments: [MAINNET_IDS.bagStoreId, receive.getAddress(), objectRef],
         typeArguments: [objectType]);
-    // Change to zkSign
-    SuiClient suiClient = SuiClient(SuiUrls.testnet);
-    final resp = await suiClient.executeTransactionBlock(bytes, [zkSign],
-        options: SuiTransactionBlockResponseOptions(showEffects: true));
+    final sign = await txb
+        .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
+    final zkSign = ZkSignBuilder.getZkSign(signSignature: sign.signature);
 
-    //
-    // await SuiClient(SuiUrls.testnet)
-    //     .signAndExecuteTransactionBlock(sender, txb);
+    final respZkSend = await suiClient.executeTransactionBlock(
+      sign.bytes,
+      [zkSign],
+      options: SuiTransactionBlockResponseOptions(showEffects: true),
+    );
+    print('respZkSend: ${respZkSend.digest}');
     var url = getLink(receive.getSecretKey());
     return url;
   }

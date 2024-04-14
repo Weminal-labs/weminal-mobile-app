@@ -17,6 +17,7 @@ import '../models/request_proof_model.dart';
 import '../states/login_state.dart';
 import 'package:http/http.dart' as http;
 
+import '../zkLogin/ZkSignBuilder.dart';
 import '../zkLogin/my_address.dart';
 import '../zkLogin/my_utils.dart';
 import '../zkSend/builder.dart';
@@ -82,7 +83,7 @@ class LoginProvider extends ChangeNotifier {
     print('myProof: $proof');
     print('ephemeralKeyPair: $ephemeralKeyPair');
 
-    var txb = TransactionBlock();
+    // var txb = TransactionBlock();
     // txb.setSender(userAddress);
     // const packageObjectId =
     //     '0x51f4a1e3bda48c305656d3bfb46db227a2029fdf5e738af341e3a29118d089ca';
@@ -106,29 +107,29 @@ class LoginProvider extends ChangeNotifier {
     //   bagStoreTableId:
     //       '0x4e1bc4085d64005e03eb4eab2510d52 7aeba9548cda431cb8f149ff37451f870',
     // );
-    const MAINNET_IDS = ZkBagContractOptions(
-      packageId:
-          '0x5bb7d0bb3240011336ca9015f553b2646302a4f05f821160344e9ec5a988f740',
-      bagStoreId:
-          '0x65b215a3f2a951c94313a89c43f0adbd2fd9ea78a0badf81e27d1c9868a8b6fe',
-      bagStoreTableId:
-          '0x616db54ca564660cd58e36a4548be68b289371ef2611485c62c374a60960084e',
-    );
+    // const MAINNET_IDS = ZkBagContractOptions(
+    //   packageId:
+    //       '0x5bb7d0bb3240011336ca9015f553b2646302a4f05f821160344e9ec5a988f740',
+    //   bagStoreId:
+    //       '0x65b215a3f2a951c94313a89c43f0adbd2fd9ea78a0badf81e27d1c9868a8b6fe',
+    //   bagStoreTableId:
+    //       '0x616db54ca564660cd58e36a4548be68b289371ef2611485c62c374a60960084e',
+    // );
     //
     // ZkBag contract = ZkBag(package: TESTNET_IDS.packageId);
     // txb = TransactionBlock();
-    ZkBag contract = ZkBag(package: MAINNET_IDS.packageId);
-    txb.setSender(userAddress);
-    var receive = SuiAccount.ed25519Account();
-    print('recive address: ${receive.getAddress()}');
+    // ZkBag contract = ZkBag(package: MAINNET_IDS.packageId);
+    // txb.setSender(userAddress);
+    // var receive = SuiAccount.ed25519Account();
+    // print('recive address: ${receive.getAddress()}');
     // //new
-    contract.newTransaction(txb,
-        arguments: [MAINNET_IDS.bagStoreId, receive.getAddress()]);
-
-    final splits = txb.splitCoins(txb.gas, [txb.pureInt(300000000)]);
-    contract.add(txb,
-        arguments: [MAINNET_IDS.bagStoreId, receive.getAddress(), splits[0]],
-        typeArguments: ['0x2::coin::Coin<0x2::sui::SUI>']);
+    // contract.newTransaction(txb,
+    //     arguments: [MAINNET_IDS.bagStoreId, receive.getAddress()]);
+    //
+    // final splits = txb.splitCoins(txb.gas, [txb.pureInt(300000000)]);
+    // contract.add(txb,
+    //     arguments: [MAINNET_IDS.bagStoreId, receive.getAddress(), splits[0]],
+    //     typeArguments: ['0x2::coin::Coin<0x2::sui::SUI>']);
     // var suiObjectRef = SuiObjectRef(
     //     "CtMynByksfRDEmDGQ77WRfKSQbe9qEANTJaQetHGB8dV",
     //     "0xd8c1f5b9530abb3a454ed145740616fcfec0bca6ef735342560e254198f1e1a8",
@@ -141,57 +142,45 @@ class LoginProvider extends ChangeNotifier {
     //     arguments: [TESTNET_IDS.bagStoreId, receive.getAddress(), objectRef],
     //     typeArguments: [objectType]);
 
-    final sign = await txb
-        .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
-
-    print('sign.signature: ${sign.signature}');
-
-    final zkSign = getZkLoginSignature(ZkLoginSignature(
-        inputs: zkLoginSignatureInputs,
-        maxEpoch: int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')),
-        userSignature: base64Decode(sign.signature)));
-
-    final resp = await suiClient.executeTransactionBlock(sign.bytes, [zkSign],
-        options: SuiTransactionBlockResponseOptions(showEffects: true));
-    String zkSignature = resp.digest;
-    //test move call
-    // var bytes = sign.bytes;
-    // print('zkSignature: $zkSignature');
-    // var serializedSignature = parseSerializedSignature(zkSign);
-    // print('serializedSignature: ${serializedSignature}');
+    // final sign = await txb
+    //     .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
     //
-    // base64Decode(zkSign).toList();
-    // List<String> tepm =
-    //     base64Decode(zkSign).toList().map((e) => e.toString()).toList();
-    // print('base64Decode(zkSign): ${base64Decode(zkSign)}');
-    // var txbres = await suiClient.executeTransactionBlock(
+    // print('sign.signature: ${sign.signature}');
+    // final zkSign = getZkLoginSignature(ZkLoginSignature(
+    //     inputs: zkLoginSignatureInputs,
+    //     maxEpoch: int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')),
+    //     userSignature: base64Decode(sign.signature)));
+    ZkSignBuilder.setInfo(
+        inputZkLoginSignatureInputs: zkLoginSignatureInputs,
+        inputMaxEpoch:
+            int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')));
+
+    String myUrl = await ZkSendLinkBuilder.createLink(
+        ephemeralKeyPair: ephemeralKeyPair,
+        senderAddress: userAddress,
+        balances: 300000000);
+    // final resp = await suiClient.executeTransactionBlock(sign.bytes, [zkSign],
+    //     options: SuiTransactionBlockResponseOptions(showEffects: true));
+    // String zkSignature = resp.digest;
+    // print('userAdrress: $userAddress');
+    // // Change to zkSign
+    // final respZkSend = await suiClient.executeTransactionBlock(
     //   sign.bytes,
     //   [zkSign],
+    //   options: SuiTransactionBlockResponseOptions(showEffects: true),
     // );
-    // print('secretKey: ${ephemeralKeyPair.getSecretKey()}');
-    // print('sign.byte: ${sign.bytes}');
-    // print('zksign: $zkSign');
-
+    // print('respZkSend: ${respZkSend.digest}');
     //
-    print('userAdrress: $userAddress');
-    // Change to zkSign
-    final respZkSend = await suiClient.executeTransactionBlock(
-      sign.bytes,
-      [zkSign],
-      options: SuiTransactionBlockResponseOptions(showEffects: true),
-    );
-    print('respZkSend: ${respZkSend.digest}');
-
-    //
-    var url = ZkSendLinkBuilder.getLink(receive.getSecretKey());
-    print('myUrl: $url');
+    // //
+    // var url = ZkSendLinkBuilder.getLink(receive.getSecretKey());
+    print('myUrl: $myUrl');
     //
     print('userAdrress: $userAddress');
     print('getObjectFields');
     getObjects(userAddress);
     return {
       'userAddress': userAddress,
-      'zkSign': zkSign,
+      'zkSign': 'zkSign',
       'zkSignature': zkSignature,
     };
   }
@@ -206,7 +195,7 @@ class LoginProvider extends ChangeNotifier {
     print('requestProofModel.toJson(): ${requestProofModel.toJson()}');
 
     var res = await http.post(
-        Uri.parse('http://192.168.1.32:3000/api/v1/contract/getZkProof'),
+        Uri.parse('http://192.168.1.15:3000/api/v1/contract/getZkProof'),
         headers: headers,
         body: jsonEncode(requestProofModel.toJson()));
     if (res.statusCode == 200) {

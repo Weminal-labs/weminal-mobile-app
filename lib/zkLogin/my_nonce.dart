@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:pointycastle/pointycastle.dart' as pointycastle;
 import 'package:convert/convert.dart';
 import 'package:sui/sui.dart';
+import 'package:weminal_app/utilities/constants.dart';
 
 import 'my_poseidon.dart';
 
@@ -75,7 +76,7 @@ Future<Map<String, dynamic>> getInfoRequestProof() async {
   final eph_public_key_0 = publicKeyBytes ~/ BigInt.from(2).pow(128);
   final eph_public_key_1 = publicKeyBytes % BigInt.from(2).pow(128);
 
-  SuiClient client = SuiClient(SuiUrls.devnet);
+  SuiClient client = SuiClient(Constants.baseNet);
 
   var getEpoch = await client.getLatestSuiSystemState();
 

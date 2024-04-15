@@ -13,6 +13,7 @@ import 'package:sui/sui_urls.dart';
 import 'package:sui/types/transactions.dart';
 import 'package:sui/zklogin/signature.dart';
 import 'package:sui/zklogin/types.dart';
+import 'package:weminal_app/utilities/constants.dart';
 
 import '../models/event_model.dart';
 import '../models/request_proof_model.dart';
@@ -35,17 +36,19 @@ class LoginProvider extends ChangeNotifier {
   LoginState _state = LoginState.initial;
 
   LoginState get state => _state;
+  // final String urlGetProof = 'http://192.168.1.32:3000/api/v1/contract/getZkProof';
+  final String urlGetProof = 'https://prover-dev.mystenlabs.com/v1';
 
   String zkSignature = '';
   String userAddress = '';
-  static final List<Event> eventList = FakeData.json.map((e) => Event.fromJson(e)).toList();
+  static final List<Event> eventList =
+      FakeData.json.map((e) => Event.fromJson(e)).toList();
   var bytes;
   var zkSign;
-  var suiClient = SuiClient(SuiUrls.devnet);
-
+  var suiClient = SuiClient(Constants.baseNet);
 
   List<Event> get events => eventList;
-  void addEvent(Event event){
+  void addEvent(Event event) {
     eventList.add(event);
     notifyListeners();
   }
@@ -107,12 +110,15 @@ class LoginProvider extends ChangeNotifier {
     // print('getNft');
     // var nfts = await getNfts(userAddress);
     // print('nfts: $nfts');
-    // var nft = nfts[0];
-    // print('nft Info');
-    // print('digest: ${nft.data!.digest}');
-    // print('objectId: ${nft.data!.objectId}');
-    // print('version: ${nft.data!.version}');
-    // print('objectType: ${nft.data!.type}');
+    // for (var nft in nfts) {
+    //   print('nft Info');
+    //   print('digest: ${nft.data!.digest}');
+    //   print('objectId: ${nft.data!.objectId}');
+    //   print('version: ${nft.data!.version}');
+    //   print('objectType: ${nft.data!.type}');
+    //   print('content: ${nft.data!.content}');
+    //   print('fields: ${nft.data!.content!.fields}');
+    // }
     //
     // String myUrl = await ZkSendLinkBuilder.createLinkObject(
     //     ephemeralKeyPair: ephemeralKeyPair,
@@ -136,10 +142,8 @@ class LoginProvider extends ChangeNotifier {
     print('requestProofModel.keyClaimName: ${requestProofModel.keyClaimName}');
     print('requestProofModel.toJson(): ${requestProofModel.toJson()}');
 
-    var res = await http.post(
-        Uri.parse('http://192.168.1.32:3000/api/v1/contract/getZkProof'),
-        headers: headers,
-        body: jsonEncode(requestProofModel.toJson()));
+    var res = await http.post(Uri.parse(urlGetProof),
+        headers: headers, body: jsonEncode(requestProofModel.toJson()));
     if (res.statusCode == 200) {
       Map<String, dynamic> response = jsonDecode(res.body);
       return response;
@@ -148,32 +152,16 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<SuiObjectResponse>> getNfts(String userAddress) async {
-    final objects = await suiClient.getOwnedObjects(userAddress,
-        options: SuiObjectDataOptions(showType: true));
-
-    List<SuiObjectResponse> nfts =
-        objects.data.where((e) => !isCoinType(e.data?.content?.fields.toString())).toList();
-    return nfts;
-  }
-
-
-  bool isCoinType(String? type) {
-    return type == '0x2::coin::Coin<0x2::sui::SUI>';
-  }
-
   Future<void> getEvents() async {
     final obj = await suiClient.getObject(userAddress,
         options: SuiObjectDataOptions(showContent: true));
   }
-
-  Future<void> createNft() async{
-    final resp = await suiClient.executeTransactionBlock(
-          bytes,
-          [zkSign],
-    );
-    print('respZkSend: ${resp.digest}');
-  }
-
-
+  //
+  // Future<void> createNft() async{
+  //   final resp = await suiClient.executeTransactionBlock(
+  //         bytes,
+  //         [zkSign],
+  //   );
+  //   print('respZkSend: ${resp.digest}');
+  // }
 }

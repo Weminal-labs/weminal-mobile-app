@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:provider/provider.dart';
+import 'package:weminal_app/services/nft_service.dart';
+import 'package:weminal_app/zkSend/builder.dart';
 
 import '../viewmodels/login_provider.dart';
 
 class DetailPage extends StatelessWidget {
   final int index;
-  const DetailPage({Key? key, required this.index }) : super(key: key);
+  const DetailPage({Key? key, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +17,19 @@ class DetailPage extends StatelessWidget {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _showAddBottomPopup(context);
+          NftService.createNft(
+              ephemeralKeyPair: ZkSendLinkBuilder.keypair,
+              senderAddress: LoginProvider.userAddressStatic,
+              arg1: 'atg1',
+              arg2: 'arg2',
+              arg3: 'arg3',
+              packageId:
+                  '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef',
+              userAddress: LoginProvider.userAddressStatic);
+          // _showAddBottomPopup(context);
         },
-        child: Icon(  Icons.attach_money,
+        child: Icon(
+          Icons.attach_money,
           color: Colors.white,
         ),
       ),
@@ -31,7 +43,7 @@ class DetailPage extends StatelessWidget {
                 Container(
                   height: 300,
                   width: double.infinity,
-                  decoration:  BoxDecoration(
+                  decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(event.coverUrl),
                       fit: BoxFit.cover,
@@ -39,7 +51,7 @@ class DetailPage extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -172,7 +184,8 @@ class DetailPage extends StatelessWidget {
                         radius: 22,
                         backgroundImage: event.host.avatarUrl != null
                             ? NetworkImage(event.host.avatarUrl)
-                            : const AssetImage('assets/images/avt1.png') as ImageProvider,
+                            : const AssetImage('assets/images/avt1.png')
+                                as ImageProvider,
                       ),
                       SizedBox(width: 10),
                       Text(
@@ -180,8 +193,7 @@ class DetailPage extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 20,
-                          fontFamily:
-                              'assets/fonts/Montserrat-Extra-Bold.ttf',
+                          fontFamily: 'assets/fonts/Montserrat-Extra-Bold.ttf',
                           fontWeight: FontWeight.w600,
                         ),
                       )
@@ -195,7 +207,6 @@ class DetailPage extends StatelessWidget {
         ),
       ),
     );
-
   }
 
   void _showAddBottomPopup(context) {
@@ -207,7 +218,8 @@ class DetailPage extends StatelessWidget {
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
                 color: Colors.white,
               ),
               child: Padding(
@@ -250,8 +262,7 @@ class DetailPage extends StatelessWidget {
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             hintText: "",
-                            hintStyle: TextStyle(color: Colors.grey
-                            )),
+                            hintStyle: TextStyle(color: Colors.grey)),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -273,8 +284,7 @@ class DetailPage extends StatelessWidget {
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             hintText: "",
-                            hintStyle: TextStyle(color: Colors.grey
-                            )),
+                            hintStyle: TextStyle(color: Colors.grey)),
                       ),
                     ),
                     SizedBox(height: 40),
@@ -282,33 +292,24 @@ class DetailPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: (){},
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue,
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6)
-                              )
-                          ),
-                          child: Text(
-                              "Buy Ticket",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16
-                              )
-                          ),
+                                  borderRadius: BorderRadius.circular(6))),
+                          child: Text("Buy Ticket",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16)),
                         )
                       ],
                     ),
                   ],
                 ),
-              )
-          ),
+              )),
         );
       },
     );
   }
-
-
-
 }

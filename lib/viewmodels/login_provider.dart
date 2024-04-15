@@ -106,6 +106,49 @@ class LoginProvider extends ChangeNotifier {
         inputMaxEpoch:
             int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')));
 
+    // Test move call
+    //test move call
+    // final txb = TransactionBlock();
+    // txb.setSender(userAddress);
+    // const packageObjectId =
+    //     '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef';
+    // txb.moveCall('$packageObjectId::event::new_ticket', arguments: [
+    //   txb.pureString('name ticket 1'),
+    //   txb.pureString('name ticket 1'),
+    //   txb.pureString('des ticket 1'),
+    //   txb.pure(
+    //       '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef'),
+    //   txb.pure(userAddress)
+    // ]);
+    // final sign = await txb
+    //     .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
+    //
+    // print('sign.signature: ${sign.signature}');
+    //
+    // final zkSign = getZkLoginSignature(ZkLoginSignature(
+    //     inputs: zkLoginSignatureInputs,
+    //     maxEpoch: int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')),
+    //     userSignature: base64Decode(sign.signature)));
+    //
+    // final resp = await suiClient.executeTransactionBlock(sign.bytes, [zkSign],
+    //     options: SuiTransactionBlockResponseOptions(showEffects: true));
+    // String zkSignature = resp.digest;
+    //
+    // var bytes = sign.bytes;
+    // print('zkSignature: $zkSignature');
+    // var serializedSignature = parseSerializedSignature(zkSign);
+    // print('serializedSignature: ${serializedSignature}');
+    //
+    // base64Decode(zkSign).toList();
+    // List<String> tepm =
+    //     base64Decode(zkSign).toList().map((e) => e.toString()).toList();
+    // print('base64Decode(zkSign): ${base64Decode(zkSign)}');
+    // var txbres = await suiClient.executeTransactionBlock(
+    //   sign.bytes,
+    //   [zkSign],
+    // );
+    // print('txbres: ${txbres.digest}');
+
     // String myUrl = await ZkSendLinkBuilder.createLink(
     //     ephemeralKeyPair: ephemeralKeyPair,
     //     senderAddress: userAddress,

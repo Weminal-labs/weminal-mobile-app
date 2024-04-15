@@ -311,7 +311,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                          fit: BoxFit.cover, image: _handleUrl(url)),
+                          fit: BoxFit.cover,
+                          image:
+                              AssetImage("assets/images/event_background.png")),
                     ),
                   ),
                 ),

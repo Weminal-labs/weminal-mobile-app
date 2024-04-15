@@ -1,6 +1,6 @@
 import '../models/event_model.dart';
 
-class FakeData{
+class FakeData {
   FakeData._();
   static List<Map<String, dynamic>> json = [
     {
@@ -26,9 +26,9 @@ class FakeData{
         "owner": "usr-eov0TQqLezYv8WO",
         "name": "Sui Foundation",
         "avatar_url":
-        "https://images.lumacdn.com/avatars/79/26309b69-c772-47bd-8659-f4b2e9ca073e",
+            "https://images.lumacdn.com/avatars/79/26309b69-c772-47bd-8659-f4b2e9ca073e",
         "bio_short":
-        "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
+            "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
         "website": "https://sui.io/",
         "instagram_handle": "",
         "linkedin_handle": "/company/sui-foundation",
@@ -61,9 +61,9 @@ class FakeData{
         "owner": "usr-eov0TQqLezYv8WO",
         "name": "Sui Foundation",
         "avatar_url":
-        "https://images.lumacdn.com/avatars/79/26309b69-c772-47bd-8659-f4b2e9ca073e",
+            "https://images.lumacdn.com/avatars/79/26309b69-c772-47bd-8659-f4b2e9ca073e",
         "bio_short":
-        "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
+            "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
         "website": "https://sui.io/",
         "instagram_handle": "",
         "linkedin_handle": "/company/sui-foundation",
@@ -75,5 +75,4 @@ class FakeData{
     },
     // 13 more events
   ];
-
 }

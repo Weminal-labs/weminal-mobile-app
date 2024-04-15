@@ -1,7 +1,16 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:sui/types/objects.dart';
+import 'package:weminal_app/services/nft_service.dart';
 import 'package:weminal_app/viewmodels/login_provider.dart';
 
 import '../states/login_state.dart';
@@ -29,7 +38,13 @@ class _ProfilePageState extends State<ProfilePage> {
         height: 800,
         child: Stack(
           children: [
-            Image.asset('assets/images/background_profile.png'),
+            Container(
+              width: double.maxFinite,
+              child: Image.asset(
+                'assets/images/bg_app.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
             Column(
               children: [
                 Stack(
@@ -37,18 +52,26 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        width: 100,
-                        height: 100,
+                        margin: EdgeInsets.only(top: 50),
+                        width: 150,
+                        height: 150,
                         decoration: const BoxDecoration(
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                color: Color(0xffbdbdbd),
+                                blurRadius: 22,
+                              ),
+                            ],
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage('assets/images/avt1.png'))),
+                                fit: BoxFit.cover,
+                                image:
+                                    AssetImage('assets/images/lhp_avt.jpg'))),
                       ),
                     ),
                     Positioned(
-                      right: 0,
-                      bottom: 0,
+                      right: 10,
+                      bottom: 10,
                       child: Image.asset(
                         'assets/images/switch.png',
                         height: 40,
@@ -57,20 +80,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
                 const Text(
-                  'Trần Hữu Tài',
+                  'Lê Huỳnh Phát',
                   style: TextStyle(
                       color: Color(0xff5669FF),
                       fontWeight: FontWeight.w800,
-                      fontSize: 36),
+                      fontSize: 32),
+                ),
+                const SizedBox(
+                  height: 8,
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.06),
                   height: 65,
                   width: double.maxFinite,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   decoration: BoxDecoration(
-                      color: const Color(0xff5669FF).withOpacity(0.31),
-                      borderRadius: BorderRadius.circular(12)),
+                      color: Colors.white.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(16)),
                   child: Consumer<LoginProvider>(
                     builder: (BuildContext context, value, Widget? child) {
                       switch (value.state) {
@@ -80,8 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           String lead = userAddress.substring(2, 6);
                           String tail =
                               userAddress.substring(userAddress.length - 4);
-                          context.read<LoginProvider>().getNfts(userAddress);
-                          context.read<LoginProvider>().createNft();
+                          // context.read<LoginProvider>().createNft();
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -96,16 +122,26 @@ class _ProfilePageState extends State<ProfilePage> {
                                 width: 8,
                               ),
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await Clipboard.setData(
+                                        ClipboardData(text: userAddress));
+                                    Fluttertoast.showToast(
+                                        msg: "Copied to clipboard",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  },
                                   icon: const ImageIcon(
                                     AssetImage('assets/images/icon_copy.png'),
-                                    color: Color(0xff5669FF),
+                                    color: Colors.lightBlue,
                                   ))
                             ],
                           );
                         default:
                           return LoadingAnimationWidget.prograssiveDots(
-                              color: Colors.white, size: 150);
+                              color: Colors.white, size: 50);
                       }
                     },
                   ),
@@ -127,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         const Padding(
                           padding: EdgeInsets.only(left: 20.0, top: 20),
                           child: Text(
-                            'Event joined',
+                            'My Tickets',
                             style: TextStyle(
                                 color: Color(0xff5669FF),
                                 fontSize: 20,
@@ -137,26 +173,45 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(
                           height: 8,
                         ),
-                        CarouselSlider.builder(
-                          itemCount: 15,
-                          itemBuilder: (BuildContext context, int itemIndex,
-                                  int pageViewIndex) =>
-                              _buildCarouseItem(),
-                          options: CarouselOptions(
-                            height: 340,
-                            aspectRatio: 16 / 9,
-                            viewportFraction: 0.8,
-                            initialPage: 0,
-                            enableInfiniteScroll: true,
-                            reverse: false,
-                            autoPlay: true,
-                            autoPlayInterval: const Duration(seconds: 3),
-                            autoPlayAnimationDuration:
-                                const Duration(milliseconds: 800),
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            enlargeCenterPage: true,
-                            enlargeFactor: 0.3,
-                            scrollDirection: Axis.horizontal,
+                        SizedBox(
+                          width: double.maxFinite,
+                          child: Consumer<LoginProvider>(
+                            builder: (context, value, child) {
+                              Widget myWidget = CarouselSlider.builder(
+                                itemCount: 1,
+                                itemBuilder: (BuildContext context,
+                                    int itemIndex, int pageViewIndex) {
+                                  return _buildCarouseItemShimmer();
+                                },
+                                options: _getCarouseOption(),
+                              );
+                              switch (value.state) {
+                                case LoginState.loaded:
+                                  return SizedBox(
+                                    child: FutureBuilder(
+                                      future: NftService.getNfts(userAddress),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return CarouselSlider.builder(
+                                            itemCount: snapshot.data!.length,
+                                            itemBuilder: (BuildContext context,
+                                                int itemIndex,
+                                                int pageViewIndex) {
+                                              return _buildCarouseItem(
+                                                  snapshot.data![itemIndex]);
+                                            },
+                                            options: _getCarouseOption(),
+                                          );
+                                        } else {
+                                          return myWidget;
+                                        }
+                                      },
+                                    ),
+                                  );
+                                default:
+                                  return myWidget;
+                              }
+                            },
                           ),
                         ),
                       ],
@@ -171,13 +226,59 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildCarouseItem() {
+  Widget _buildCarouseItemShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[200]!,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: const DecorationImage(
+                  fit: BoxFit.fitHeight,
+                  image: AssetImage("assets/images/event_background.png"),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Container(
+            width: double.maxFinite,
+            color: Colors.grey.withOpacity(0.5),
+            height: 18,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          buildStackedImages(),
+          const SizedBox(
+            height: 4,
+          ),
+          Container(
+            width: 200,
+            color: Colors.grey.withOpacity(0.5),
+            height: 18,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCarouseItem(SuiObjectResponse object) {
+    String? url = object.data?.content?.fields['url'];
+    print('nftUrl: $url');
     return Stack(
       children: [
         Container(
           decoration: BoxDecoration(boxShadow: const <BoxShadow>[
             BoxShadow(
-              color: Color(0xffBDBDBDFF),
+              color: Color(0xffbdbdbdff),
               blurRadius: 22,
             ),
           ], color: Colors.white, borderRadius: BorderRadius.circular(12)),
@@ -190,21 +291,20 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Expanded(
                 child: Container(
+                  width: double.maxFinite,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                      fit: BoxFit.fitHeight,
-                      image: AssetImage("assets/images/event_background.png"),
-                    ),
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: _handleUrl(url)),
                   ),
                 ),
               ),
               const SizedBox(
                 height: 8,
               ),
-              const Text(
-                'Internation Band Mu...',
-                style: TextStyle(
+              Text(
+                object.data?.content?.fields['name'] ?? '',
+                style: const TextStyle(
                     fontFamily: "Oswald",
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -261,7 +361,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Positioned(
           top: 25,
-          left: 260,
+          left: 280,
           child: Container(
               height: 43,
               width: 40,
@@ -313,5 +413,35 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  CarouselOptions _getCarouseOption() {
+    return CarouselOptions(
+      height: 340,
+      aspectRatio: 16 / 9,
+      viewportFraction: 0.8,
+      initialPage: 0,
+      enableInfiniteScroll: true,
+      reverse: false,
+      autoPlay: true,
+      autoPlayInterval: const Duration(seconds: 3),
+      autoPlayAnimationDuration: const Duration(milliseconds: 800),
+      autoPlayCurve: Curves.fastOutSlowIn,
+      enlargeCenterPage: true,
+      enlargeFactor: 0.3,
+      scrollDirection: Axis.horizontal,
+    );
+  }
+
+  ImageProvider _handleUrl(String? url) {
+    if (url == null) {
+      return AssetImage('assets/images/event_background.png');
+    }
+    late Uint8List decodeUrl;
+    if (url.contains('data:image/jpeg;base64,')) {
+      decodeUrl = base64Decode(url.replaceAll('data:image/jpeg;base64,', ''));
+      return MemoryImage(decodeUrl);
+    }
+    return NetworkImage(url);
   }
 }

@@ -46,6 +46,9 @@ dependencies:
    loading_animation_widget: ^1.2.1
    pretty_qr_code: ^3.3.0
    dart_bech32: ^2.0.0
+   shimmer: ^3.0.0
+   fluttertoast: ^8.2.5
+   cached_network_image: ^3.3.1
 
 
 dev_dependencies:

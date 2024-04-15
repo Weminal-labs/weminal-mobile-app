@@ -123,7 +123,7 @@ class LoginProvider extends ChangeNotifier {
     print('requestProofModel.toJson(): ${requestProofModel.toJson()}');
 
     var res = await http.post(
-        Uri.parse('http://192.168.1.15:3000/api/v1/contract/getZkProof'),
+        Uri.parse('http://192.168.1.32:3000/api/v1/contract/getZkProof'),
         headers: headers,
         body: jsonEncode(requestProofModel.toJson()));
     if (res.statusCode == 200) {

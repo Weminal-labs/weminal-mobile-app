@@ -75,7 +75,7 @@ Future<Map<String, dynamic>> getInfoRequestProof() async {
   final eph_public_key_0 = publicKeyBytes ~/ BigInt.from(2).pow(128);
   final eph_public_key_1 = publicKeyBytes % BigInt.from(2).pow(128);
 
-  SuiClient client = SuiClient(SuiUrls.mainnet);
+  SuiClient client = SuiClient(SuiUrls.devnet);
 
   var getEpoch = await client.getLatestSuiSystemState();
 

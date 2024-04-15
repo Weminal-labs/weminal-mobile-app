@@ -18,14 +18,12 @@ class DetailPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           NftService.createNft(
-              ephemeralKeyPair: ZkSendLinkBuilder.keypair,
-              senderAddress: LoginProvider.userAddressStatic,
-              arg1: 'atg1',
-              arg2: 'arg2',
-              arg3: 'arg3',
-              packageId:
-                  '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef',
-              userAddress: LoginProvider.userAddressStatic);
+            ephemeralKeyPair: LoginProvider.ephemeralKeyPair,
+            senderAddress: LoginProvider.userAddressStatic,
+            name: 'atg1',
+            description: 'arg2',
+            imageUrl: 'arg3',
+          );
           // _showAddBottomPopup(context);
         },
         child: Icon(

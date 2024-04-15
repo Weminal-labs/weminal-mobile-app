@@ -261,12 +261,17 @@ class DetailTicketPage extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) {
-                            return SimpleDialog(
-                              backgroundColor: Colors.white,
+                            return Column(
                               children: [
-                                PrettyQrView(
-                                  qrImage: qrImage,
-                                  decoration: const PrettyQrDecoration(),
+                                Text('url: $url'),
+                                SimpleDialog(
+                                  backgroundColor: Colors.white,
+                                  children: [
+                                    PrettyQrView(
+                                      qrImage: qrImage,
+                                      decoration: const PrettyQrDecoration(),
+                                    ),
+                                  ],
                                 ),
                               ],
                             );

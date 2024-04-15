@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:sui/sui.dart';
 import 'package:weminal_app/utilities/constants.dart';
+import 'package:weminal_app/viewmodels/login_provider.dart';
 
 import '../zkLogin/ZkSignBuilder.dart';
 
@@ -24,13 +25,11 @@ class NftService {
   static void createNft(
       {required Keypair ephemeralKeyPair,
       required String senderAddress,
-      required String arg1,
-      required String arg2,
-      required String arg3,
-      required String packageId,
-      required String userAddress}) async {
+      required String name,
+      required String description,
+      required String imageUrl}) async {
     final txb = TransactionBlock();
-    txb.setSender(userAddress);
+    txb.setSender(senderAddress);
 
     const packageObjectId =
         '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef';
@@ -40,7 +39,7 @@ class NftService {
       txb.pureString('des ticket 1'),
       txb.pure(
           '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef'),
-      txb.pure(userAddress)
+      txb.pure(senderAddress)
     ]);
 
     final sign = await txb
@@ -51,21 +50,15 @@ class NftService {
 
     final resp = await suiClient.executeTransactionBlock(sign.bytes, [zkSign],
         options: SuiTransactionBlockResponseOptions(showEffects: true));
-    String zkSignature = resp.digest;
 
-    var bytes = sign.bytes;
-    print('zkSignature: $zkSignature');
-    var serializedSignature = parseSerializedSignature(zkSign);
-    print('serializedSignature: ${serializedSignature}');
-
-    base64Decode(zkSign).toList();
-    List<String> tepm =
-        base64Decode(zkSign).toList().map((e) => e.toString()).toList();
-    print('base64Decode(zkSign): ${base64Decode(zkSign)}');
     var txbres = await suiClient.executeTransactionBlock(
       sign.bytes,
       [zkSign],
     );
+    print('sign: $sign');
+
+    print('zkSign: $zkSign');
+
     print('createNft: ${txbres.digest}');
   }
 }

@@ -148,7 +148,10 @@ class LoginProvider extends ChangeNotifier {
     //   [zkSign],
     // );
     // print('txbres: ${txbres.digest}');
-
+    // print('sign: $sign');
+    //
+    // print('zkSign: $zkSign');
+    //
     // String myUrl = await ZkSendLinkBuilder.createLink(
     //     ephemeralKeyPair: ephemeralKeyPair,
     //     senderAddress: userAddress,

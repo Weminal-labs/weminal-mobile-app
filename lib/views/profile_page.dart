@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:sui/http/http.dart' as http;
 import 'package:sui/types/objects.dart';
 import 'package:weminal_app/models/NftInfo.dart';
 import 'package:weminal_app/services/nft_service.dart';
@@ -307,13 +308,10 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Expanded(
                   child: Container(
+                    child: _handleUrl(url),
                     width: double.maxFinite,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image:
-                              AssetImage("assets/images/event_background.png")),
                     ),
                   ),
                 ),
@@ -454,15 +452,20 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  ImageProvider _handleUrl(String? url) {
+  dynamic _handleUrl(String? url) {
+    print('my ticket url: $url');
     if (url == null) {
-      return const AssetImage('assets/images/event_background.png');
+      return Image.asset('assets/images/event_background.png');
     }
+
     late Uint8List decodeUrl;
     if (url.contains('data:image/jpeg;base64,')) {
       decodeUrl = base64Decode(url.replaceAll('data:image/jpeg;base64,', ''));
-      return MemoryImage(decodeUrl);
+      return Image.memory(decodeUrl);
     }
-    return NetworkImage(url);
+    if (url.contains('png') || url.contains('jpg')) {
+      return Image.network(url);
+    }
+    return Image.asset('assets/images/event_background.png');
   }
 }

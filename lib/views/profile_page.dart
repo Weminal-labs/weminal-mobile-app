@@ -10,7 +10,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sui/types/objects.dart';
+import 'package:weminal_app/models/NftInfo.dart';
 import 'package:weminal_app/services/nft_service.dart';
+import 'package:weminal_app/utilities/fake_data.dart';
+import 'package:weminal_app/utilities/router_manager.dart';
 import 'package:weminal_app/viewmodels/login_provider.dart';
 
 import '../states/login_state.dart';
@@ -273,107 +276,123 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildCarouseItem(SuiObjectResponse object) {
     String? url = object.data?.content?.fields['url'];
     print('nftUrl: $url');
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(boxShadow: const <BoxShadow>[
-            BoxShadow(
-              color: Color(0xffbdbdbdff),
-              blurRadius: 22,
-            ),
-          ], color: Colors.white, borderRadius: BorderRadius.circular(12)),
-          alignment: Alignment.topLeft,
-          margin: const EdgeInsets.all(8),
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                        fit: BoxFit.cover, image: _handleUrl(url)),
-                  ),
-                ),
+    return GestureDetector(
+      onTap: () {
+        var index = FakeData.findIndexById(
+            object.data?.content?.fields['event_id'] ?? '');
+        print("index: $index");
+        Navigator.pushNamed(context, Routes.detailTicketPage, arguments: [
+          index == -1 ? 0 : index,
+          NftInfo(
+              suiObjectRef: SuiObjectRef(object.data!.digest,
+                  object.data!.objectId, object.data!.version),
+              objectType: object.data!.type!)
+        ]);
+      },
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(boxShadow: const <BoxShadow>[
+              BoxShadow(
+                color: Color(0xffbdbdbdff),
+                blurRadius: 22,
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              Text(
-                object.data?.content?.fields['name'] ?? '',
-                style: const TextStyle(
-                    fontFamily: "Oswald",
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              buildStackedImages(),
-              const Row(
-                children: [
-                  Icon(
-                    Icons.person,
-                    color: Color(0xff716E90),
-                  ),
-                  Text(
-                    '60 people attended',
-                    style: TextStyle(
-                        color: Color(0xff2B2849), fontWeight: FontWeight.w400),
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-        Positioned(
-          top: 22,
-          left: 24,
-          child: Container(
-            height: 60,
-            width: 65,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            ], color: Colors.white, borderRadius: BorderRadius.circular(12)),
+            alignment: Alignment.topLeft,
+            margin: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '10',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xffF0635A),
+                Expanded(
+                  child: Container(
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          fit: BoxFit.cover, image: _handleUrl(url)),
+                    ),
                   ),
                 ),
-                Text(
-                  'JUNE',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xffF0635A),
-                  ),
+                const SizedBox(
+                  height: 8,
                 ),
+                Text(
+                  object.data?.content?.fields['name'] ?? '',
+                  style: const TextStyle(
+                      fontFamily: "Oswald",
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                buildStackedImages(),
+                const Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      color: Color(0xff716E90),
+                    ),
+                    Text(
+                      '60 people attended',
+                      style: TextStyle(
+                          color: Color(0xff2B2849),
+                          fontWeight: FontWeight.w400),
+                    )
+                  ],
+                )
               ],
             ),
           ),
-        ),
-        Positioned(
-          top: 25,
-          left: 280,
-          child: Container(
-              height: 43,
-              width: 40,
-              padding: const EdgeInsets.all(8),
+          Positioned(
+            top: 22,
+            left: 24,
+            child: Container(
+              height: 60,
+              width: 65,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: const ImageIcon(
-                AssetImage("assets/images/icon_save.png"),
-                color: Color(0xffF0635A),
-              )),
-        ),
-      ],
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '10',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xffF0635A),
+                    ),
+                  ),
+                  Text(
+                    'JUNE',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xffF0635A),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 25,
+            left: 280,
+            child: Container(
+                height: 43,
+                width: 40,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
+                child: const ImageIcon(
+                  AssetImage("assets/images/icon_save.png"),
+                  color: Color(0xffF0635A),
+                )),
+          ),
+        ],
+      ),
     );
   }
 
@@ -435,7 +454,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   ImageProvider _handleUrl(String? url) {
     if (url == null) {
-      return AssetImage('assets/images/event_background.png');
+      return const AssetImage('assets/images/event_background.png');
     }
     late Uint8List decodeUrl;
     if (url.contains('data:image/jpeg;base64,')) {

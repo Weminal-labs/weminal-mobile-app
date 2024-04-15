@@ -1,5 +1,5 @@
 import 'package:sui/sui.dart';
 
 class Constants {
-  static const baseNet = SuiUrls.devnet;
+  static const baseNet = SuiUrls.mainnet;
 }

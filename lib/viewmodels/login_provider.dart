@@ -36,11 +36,14 @@ class LoginProvider extends ChangeNotifier {
   LoginState _state = LoginState.initial;
 
   LoginState get state => _state;
-  // final String urlGetProof = 'http://192.168.1.32:3000/api/v1/contract/getZkProof';
-  final String urlGetProof = 'https://prover-dev.mystenlabs.com/v1';
+  final String urlGetProof =
+      'http://192.168.1.15:3000/api/v1/contract/getZkProof';
+  // final String urlGetProof = 'https://prover-dev.mystenlabs.com/v1';
 
   String zkSignature = '';
   String userAddress = '';
+  static String userAddressStatic = '';
+
   static final List<Event> eventList =
       FakeData.json.map((e) => Event.fromJson(e)).toList();
   var bytes;
@@ -60,7 +63,7 @@ class LoginProvider extends ChangeNotifier {
     Map<String, String> addressAndSignature =
         await _handleLogin(userJwt, resProofRequestInfo);
     userAddress = addressAndSignature['userAddress']!;
-
+    userAddressStatic = userAddress;
     _state = LoginState.loaded;
     notifyListeners();
   }

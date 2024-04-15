@@ -6,10 +6,10 @@ class FakeData {
     {
       "id": "evt-AipW3EfmGB81vDC",
       "name": "Introduction to Sui and Move",
-      "cover_url":
-      "assets/images/sui_bg.jpg",
+      "cover_url": "assets/images/sui_bg.jpg",
       "created_at": "2024-03-12T01:41:30.679Z",
-      "desription": "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
+      "desription":
+          "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
       "start_at": "2024-03-21T12:00:00.000Z",
       "end_at": "2024-03-21T13:00:00.000Z",
       "location": {"name": "Ho Chi Minh city"},
@@ -41,10 +41,10 @@ class FakeData {
     {
       "id": "evt-AipW3EfmGB81vDC",
       "name": "The VBI Blockchain Hackathon",
-      "cover_url":
-      "assets/images/vbi.jpg",
+      "cover_url": "assets/images/vbi.jpg",
       "created_at": "2024-03-12T01:41:30.679Z",
-      "desription": "The VBI Blockchain Hackathon is a programming competition event where computer programmers and others engage in blockchain-themed software development.",
+      "desription":
+          "The VBI Blockchain Hackathon is a programming competition event where computer programmers and others engage in blockchain-themed software development.",
       "start_at": "2024-03-21T12:00:00.000Z",
       "end_at": "2024-03-21T13:00:00.000Z",
       "location": {"name": "Ho Chi Minh city"},
@@ -75,4 +75,13 @@ class FakeData {
     },
     // 13 more events
   ];
+
+  static int findIndexById(String id) {
+    for (int i = 0; i < json.length; i++) {
+      if (json[i]['id'] == id) {
+        return i;
+      }
+    }
+    return -1;
+  }
 }

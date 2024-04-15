@@ -12,11 +12,11 @@ import '../zkLogin/ZkSignBuilder.dart';
 
 const MAINNET_IDS = ZkBagContractOptions(
   packageId:
-      '0x5bb7d0bb3240011336ca9015f553b2646302a4f05f821160344e9ec5a988f740',
+  '0x5bb7d0bb3240011336ca9015f553b2646302a4f05f821160344e9ec5a988f740',
   bagStoreId:
-      '0x65b215a3f2a951c94313a89c43f0adbd2fd9ea78a0badf81e27d1c9868a8b6fe',
+  '0x65b215a3f2a951c94313a89c43f0adbd2fd9ea78a0badf81e27d1c9868a8b6fe',
   bagStoreTableId:
-      '0x616db54ca564660cd58e36a4548be68b289371ef2611485c62c374a60960084e',
+  '0x616db54ca564660cd58e36a4548be68b289371ef2611485c62c374a60960084e',
 );
 
 const Map<String, int> SIGNATURE_SCHEME_TO_FLAG = {

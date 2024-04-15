@@ -1,7 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
+import 'package:weminal_app/utilities/fake_data.dart';
 import 'package:weminal_app/utilities/router_manager.dart';
 import 'package:weminal_app/models/event_model.dart';
+import 'package:weminal_app/viewmodels/login_provider.dart';
+import 'package:weminal_app/viewmodels/login_provider.dart';
+import 'package:weminal_app/viewmodels/login_provider.dart';
 
 import '../widget/stack_widget.dart';
 
@@ -13,84 +20,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> json = [
-    {
-      "id": "evt-AipW3EfmGB81vDC",
-      "name": "Introduction to Sui and Move",
-      "cover_url":
-          "https://images.lumacdn.com/event-covers/uk/29286153-12c1-4d8b-9c36-b838840115bd",
-      "created_at": "2024-03-12T01:41:30.679Z",
-      "start_at": "2024-03-21T12:00:00.000Z",
-      "end_at": "2024-03-21T13:00:00.000Z",
-      "location": {"name": "Ho Chi Minh city"},
-      "timezone": "Europe/London",
-      "ticket": {
-        "total": 5,
-        "price": 0,
-        "is_sold_out": false,
-        "spots_remaining": 0,
-        "is_near_capacity": false,
-        "ticket_currency": "usd"
-      },
-      "host": {
-        "owner": "usr-eov0TQqLezYv8WO",
-        "name": "Sui Foundation",
-        "avatar_url":
-            "https://images.lumacdn.com/avatars/79/26309b69-c772-47bd-8659-f4b2e9ca073e",
-        "bio_short":
-            "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
-        "website": "https://sui.io/",
-        "instagram_handle": "",
-        "linkedin_handle": "/company/sui-foundation",
-        "tiktok_handle": "",
-        "twitter_handle": "suinetwork",
-        "youtube_handle": "Sui-Network",
-        "timezone": "Asia/Manila"
-      }
-    },
-    {
-      "id": "evt-AipW3EfmGB81vDC",
-      "name": "Introduction XXXXXXXX",
-      "cover_url":
-          "https://images.lumacdn.com/event-covers/uk/29286153-12c1-4d8b-9c36-b838840115bd",
-      "created_at": "2024-03-12T01:41:30.679Z",
-      "start_at": "2024-03-21T12:00:00.000Z",
-      "end_at": "2024-03-21T13:00:00.000Z",
-      "location": {"name": "Ho Chi Minh city"},
-      "timezone": "Europe/London",
-      "ticket": {
-        "total": 5,
-        "price": 0,
-        "is_sold_out": false,
-        "spots_remaining": 0,
-        "is_near_capacity": false,
-        "ticket_currency": "usd"
-      },
-      "host": {
-        "owner": "usr-eov0TQqLezYv8WO",
-        "name": "Sui Foundation",
-        "avatar_url":
-            "https://images.lumacdn.com/avatars/79/26309b69-c772-47bd-8659-f4b2e9ca073e",
-        "bio_short":
-            "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
-        "website": "https://sui.io/",
-        "instagram_handle": "",
-        "linkedin_handle": "/company/sui-foundation",
-        "tiktok_handle": "",
-        "twitter_handle": "suinetwork",
-        "youtube_handle": "Sui-Network",
-        "timezone": "Asia/Manila"
-      }
-    },
-    // 13 more events
-  ];
-  final List<Event> eventList = [];
   @override
   Widget build(BuildContext context) {
-    for (Map<String, dynamic> m in json) {
-      Event e = Event.fromJson(m);
-      eventList.add(e);
-    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -112,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                 height: 8,
               ),
               CarouselSlider.builder(
-                itemCount: eventList.length,
+                itemCount: context.read<LoginProvider>().events.length,
                 itemBuilder:
                     (BuildContext context, int itemIndex, int pageViewIndex) =>
                         _buildCarouseItem(context, itemIndex),
@@ -146,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                 height: 8,
               ),
               CarouselSlider.builder(
-                itemCount: eventList.length,
+                itemCount: context.read<LoginProvider>().events.length,
                 itemBuilder:
                     (BuildContext context, int itemIndex, int pageViewIndex) =>
                         _buildCarouseItem(context, itemIndex),
@@ -213,7 +144,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
   Widget _buildCarouseItem(BuildContext context, int itemIndex) {
     return GestureDetector(
       onTap: () {
@@ -250,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                   height: 8,
                 ),
                 Text(
-                  eventList[itemIndex].name,
+                  context.read<LoginProvider>().events[itemIndex].name,
                   style: const TextStyle(
                       fontFamily: "Oswald",
                       fontSize: 18,

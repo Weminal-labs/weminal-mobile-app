@@ -75,12 +75,15 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Simple Example')),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : WebViewWidget(
-              controller: getWebViewController(context),
-            ),
+          : SafeArea(
+            child: Center(
+              child: WebViewWidget(
+                controller: getWebViewController(context),
+              ),
+            )
+          ),
     );
   }
 }
@@ -139,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                       left: 30,
                       top: 20), // Add top padding
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
@@ -215,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const SizedBox(height: 80.0),
+                      const SizedBox(height: 40.0),
                       OutlinedButton(
                         onPressed: () async {
                           // login with google
@@ -246,75 +249,9 @@ class _LoginPageState extends State<LoginPage> {
                             width: 30.0,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 20),
+                            padding: EdgeInsets.only(left: 30),
                             child: Text("Login with google"),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Icon(Icons.arrow_circle_right),
-                          )
-                        ]),
-                      ),
-                      const SizedBox(height: 30.0),
-                      OutlinedButton(
-                        onPressed: () {
-                          print("Github clicked!");
-                        },
-                        style: OutlinedButton.styleFrom(
-                            foregroundColor:
-                                const Color.fromRGBO(86, 105, 255, 1.000),
-                            textStyle: const TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
-                            ),
-                            padding: const EdgeInsets.only(
-                                left: 50, right: 50, top: 20, bottom: 20)),
-                        child: const Row(children: [
-                          Image(
-                            image: AssetImage("assets/images/github_icon.png"),
-                            height: 30,
-                            width: 30.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Text("Login with Github"),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Icon(Icons.arrow_circle_right),
-                          )
-                        ]),
-                      ),
-                      const SizedBox(height: 30.0),
-                      OutlinedButton(
-                        onPressed: () {
-                          print("Github clicked!");
-                        },
-                        style: OutlinedButton.styleFrom(
-                            foregroundColor:
-                                const Color.fromRGBO(86, 105, 255, 1.000),
-                            textStyle: const TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
-                            ),
-                            padding: const EdgeInsets.only(
-                                left: 50, right: 50, top: 20, bottom: 20)),
-                        child: const Row(children: [
-                          Image(
-                            image: AssetImage("assets/images/twitter_icon.png"),
-                            height: 30,
-                            width: 30.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Text("Login with Github"),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Icon(Icons.arrow_circle_right),
-                          )
                         ]),
                       ),
                     ],

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -13,10 +14,12 @@ import 'package:sui/types/transactions.dart';
 import 'package:sui/zklogin/signature.dart';
 import 'package:sui/zklogin/types.dart';
 
+import '../models/event_model.dart';
 import '../models/request_proof_model.dart';
 import '../states/login_state.dart';
 import 'package:http/http.dart' as http;
 
+import '../utilities/fake_data.dart';
 import '../zkLogin/ZkSignBuilder.dart';
 import '../zkLogin/my_address.dart';
 import '../zkLogin/my_utils.dart';
@@ -33,8 +36,19 @@ class LoginProvider extends ChangeNotifier {
 
   LoginState get state => _state;
 
+  String zkSignature = '';
   String userAddress = '';
-  var suiClient = SuiClient(SuiUrls.mainnet);
+  static final List<Event> eventList = FakeData.json.map((e) => Event.fromJson(e)).toList();
+  var bytes;
+  var zkSign;
+  var suiClient = SuiClient(SuiUrls.devnet);
+
+
+  List<Event> get events => eventList;
+  void addEvent(Event event){
+    eventList.add(event);
+    notifyListeners();
+  }
 
   void loadAddressAndSignature(
       String userJwt, Map<String, dynamic> resProofRequestInfo) async {
@@ -123,7 +137,7 @@ class LoginProvider extends ChangeNotifier {
     print('requestProofModel.toJson(): ${requestProofModel.toJson()}');
 
     var res = await http.post(
-        Uri.parse('http://192.168.1.15:3000/api/v1/contract/getZkProof'),
+        Uri.parse('http://192.168.1.32:3000/api/v1/contract/getZkProof'),
         headers: headers,
         body: jsonEncode(requestProofModel.toJson()));
     if (res.statusCode == 200) {
@@ -139,9 +153,10 @@ class LoginProvider extends ChangeNotifier {
         options: SuiObjectDataOptions(showType: true));
 
     List<SuiObjectResponse> nfts =
-        objects.data.where((e) => !isCoinType(e.data?.type)).toList();
+        objects.data.where((e) => !isCoinType(e.data?.content?.fields.toString())).toList();
     return nfts;
   }
+
 
   bool isCoinType(String? type) {
     return type == '0x2::coin::Coin<0x2::sui::SUI>';
@@ -151,4 +166,14 @@ class LoginProvider extends ChangeNotifier {
     final obj = await suiClient.getObject(userAddress,
         options: SuiObjectDataOptions(showContent: true));
   }
+
+  Future<void> createNft() async{
+    final resp = await suiClient.executeTransactionBlock(
+          bytes,
+          [zkSign],
+    );
+    print('respZkSend: ${resp.digest}');
+  }
+
+
 }

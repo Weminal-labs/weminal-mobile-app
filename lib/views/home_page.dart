@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildCarouseItem(BuildContext context, int itemIndex) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, Routes.detailPage);
+        Navigator.pushNamed(context, Routes.detailPage, arguments: itemIndex);
       },
       child: Stack(
         children: [
@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10),
                       image: const DecorationImage(
                         fit: BoxFit.fitHeight,
-                        image: AssetImage("assets/images/event_background.png"),
+                        image: AssetImage("assets/images/sui_bg.jpg"),
                       ),
                     ),
                   ),

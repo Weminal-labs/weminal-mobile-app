@@ -1,167 +1,314 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:provider/provider.dart';
+
+import '../viewmodels/login_provider.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({Key? key}) : super(key: key);
+  final int index;
+  const DetailPage({Key? key, required this.index }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final event = context.read<LoginProvider>().events[index];
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 250,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/detail_event_img.png'),
-                    fit: BoxFit.cover,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddBottomPopup(context);
+        },
+        child: Icon(  Icons.attach_money,
+          color: Colors.white,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  height: 300,
+                  width: double.infinity,
+                  decoration:  BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(event.coverUrl),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                InkWell(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 35, left: 10),
+                    width: 100,
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.3),
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "Micro Front-end - new tech",
+                        Icon(
+                          Icons.arrow_back_ios,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 5),
+                        Text("Back",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontFamily: 'assets/fonts/Montserrat-Regular.ttf',
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: Text(
+                          event.name,
                           style: TextStyle(
                             fontSize: 26,
                             fontFamily: 'assets/fonts/Montserrat-ExtraBold.ttf',
                             fontWeight: FontWeight.w800,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    const Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_today,
-                          color: Colors.black,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "12/12/2021",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontFamily: 'assets/fonts/Montserrat-Regular.ttf',
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    const Row(
-                      children: [
-                        Icon(
-                          Icons.location_on_rounded,
-                          color: Colors.black,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Soekarno Hatta Sport Center",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontFamily: 'assets/fonts/Montserrat-Regular.ttf',
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "About",
-                      style: TextStyle(
-                        color: Color(0xff5669FF),
-                        fontSize: 24,
-                        fontFamily: 'assets/fonts/Montserrat-ExtraBold.ttf',
-                        fontWeight: FontWeight.w900,
                       ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        textAlign: TextAlign.justify,
-                        "Micro Front-end is a new technology that is being used by many companies. It is a new way to build web applications that are more scalable and easier to maintain. This event will introduce you to the basics of Micro Front-end and how you can use it to build your own web applications.",
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        color: Colors.black,
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        event.startAt,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 17,
                           fontFamily: 'assets/fonts/Montserrat-Regular.ttf',
-                          fontWeight: FontWeight.w400,
                         ),
-                        maxLines: 20,
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_on_rounded,
+                        color: Colors.black,
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        event.location.name,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontFamily: 'assets/fonts/Montserrat-Regular.ttf',
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "About",
+                    style: TextStyle(
+                      color: Color(0xff5669FF),
+                      fontSize: 24,
+                      fontFamily: 'assets/fonts/Montserrat-ExtraBold.ttf',
+                      fontWeight: FontWeight.w900,
                     ),
-                    const Text(
-                      "Created by",
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      event.desription,
                       style: TextStyle(
-                        color: Color(0xff5669FF),
-                        fontSize: 24,
-                        fontFamily: 'assets/fonts/Montserrat-ExtraBold.ttf',
-                        fontWeight: FontWeight.w900,
+                        color: Colors.black,
+                        fontSize: 17,
+                        fontFamily: 'assets/fonts/Montserrat-Regular.ttf',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  const Text(
+                    "Created by",
+                    style: TextStyle(
+                      color: Color(0xff5669FF),
+                      fontSize: 24,
+                      fontFamily: 'assets/fonts/Montserrat-ExtraBold.ttf',
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 22,
+                        backgroundImage: event.host.avatarUrl != null
+                            ? NetworkImage(event.host.avatarUrl)
+                            : const AssetImage('assets/images/avt1.png') as ImageProvider,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        event.host.name,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily:
+                              'assets/fonts/Montserrat-Extra-Bold.ttf',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+  }
+
+  void _showAddBottomPopup(context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        "Your Ticket",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    const Row(
+                    Divider(
+                      thickness: 1.2,
+                      color: Colors.grey.shade200,
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Name",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(6)),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            hintText: "",
+                            hintStyle: TextStyle(color: Colors.grey
+                            )),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Price",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(6)),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            hintText: "",
+                            hintStyle: TextStyle(color: Colors.grey
+                            )),
+                      ),
+                    ),
+                    SizedBox(height: 40),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircleAvatar(
-                          radius: 22,
-                          backgroundImage: AssetImage('assets/images/avt1.png'),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          "John Doe",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontFamily:
-                                'assets/fonts/Montserrat-Extra-Bold.ttf',
-                            fontWeight: FontWeight.w600,
+                        ElevatedButton(
+                          onPressed: (){},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6)
+                              )
+                          ),
+                          child: Text(
+                              "Buy Ticket",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16
+                              )
                           ),
                         )
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      "Qr Code",
-                      style: TextStyle(
-                        color: Color(0xff5669FF),
-                        fontSize: 24,
-                        fontFamily: 'assets/fonts/Montserrat-ExtraBold.ttf',
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 140,
-                          height: 140,
-                          child: PrettyQrView.data(
-                            data: 'https://www.facebook.com/wrxhard/',
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24)
                   ],
                 ),
               )
-            ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
+
+
+
 }

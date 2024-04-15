@@ -14,6 +14,7 @@ class Event {
   String name;
   String coverUrl;
   String createdAt;
+  String desription;
   String startAt;
   String endAt;
   Location location;
@@ -26,6 +27,7 @@ class Event {
     required this.name,
     required this.coverUrl,
     required this.createdAt,
+    required this.desription,
     required this.startAt,
     required this.endAt,
     required this.location,
@@ -39,6 +41,7 @@ class Event {
     String? name,
     String? coverUrl,
     String? createdAt,
+    String? description,
     String? startAt,
     String? endAt,
     Location? location,
@@ -51,6 +54,7 @@ class Event {
         name: name ?? this.name,
         coverUrl: coverUrl ?? this.coverUrl,
         createdAt: createdAt ?? this.createdAt,
+        desription: description ?? this.desription,
         startAt: startAt ?? this.startAt,
         endAt: endAt ?? this.endAt,
         location: location ?? this.location,
@@ -64,6 +68,7 @@ class Event {
         name: json["name"],
         coverUrl: json["cover_url"],
         createdAt: json["created_at"],
+        desription: json["desription"],
         startAt: json["start_at"],
         endAt: json["end_at"],
         location: Location.fromJson(json["location"]),
@@ -77,6 +82,7 @@ class Event {
         "name": name,
         "cover_url": coverUrl,
         "created_at": createdAt,
+        "desription": desription,
         "start_at": startAt,
         "end_at": endAt,
         "location": location.toJson(),

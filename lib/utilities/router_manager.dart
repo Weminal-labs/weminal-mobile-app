@@ -20,7 +20,7 @@ class RouteGenerator {
             settings: routeSettings, builder: (context) => const LoginPage());
       case Routes.detailPage:
         return MaterialPageRoute(
-            settings: routeSettings, builder: (context) => const DetailPage());
+            settings: routeSettings, builder: (context) => DetailPage(index: routeSettings.arguments as int));
       default:
         return unDefinedRoute();
     }

@@ -16,12 +16,6 @@ import 'package:weminal_app/zkLogin/my_utils.dart';
 import '../models/request_proof_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    home: LoginPage(),
-  ));
-}
-
 class WebViewPage extends StatefulWidget {
   final String url;
 

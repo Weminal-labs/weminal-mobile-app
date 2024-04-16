@@ -252,7 +252,7 @@ class DetailTicketPage extends StatelessWidget {
                                 nftInfo.suiObjectRef.version),
                             objectType: nftInfo.objectType);
                         print('detail ticket url: $url');
-                        _showAddBottomPopup(context, url, event.name);
+                        _showAddBottomPopup(context, url);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black),
@@ -270,13 +270,14 @@ class DetailTicketPage extends StatelessWidget {
       ),
     );
   }
-  void _showAddBottomPopup(context, userAddress, eventName) {
+  void _showAddBottomPopup(context, qrLink) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return QrComponent(
-          wallet: userAddress,
-          eventName: eventName,
+        return SingleChildScrollView(
+          child: QrComponent(
+            qrLink: qrLink,
+          ),
         );
       },
     );

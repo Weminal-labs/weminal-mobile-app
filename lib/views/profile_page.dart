@@ -13,12 +13,13 @@ import 'package:shimmer/shimmer.dart';
 import 'package:sui/http/http.dart' as http;
 import 'package:sui/types/objects.dart';
 import 'package:weminal_app/models/NftInfo.dart';
+import 'package:weminal_app/models/NftInfoData.dart';
 import 'package:weminal_app/services/nft_service.dart';
 import 'package:weminal_app/utilities/fake_data.dart';
 import 'package:weminal_app/utilities/router_manager.dart';
 import 'package:weminal_app/viewmodels/login_provider.dart';
 
-import '../states/login_state.dart';
+import '../states/state.dart';
 import '../widget/stack_widget.dart';
 import '../zkSend/builder.dart';
 
@@ -107,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Consumer<LoginProvider>(
                     builder: (BuildContext context, value, Widget? child) {
                       switch (value.state) {
-                        case LoginState.loaded:
+                        case EventState.loaded:
                           userAddress =
                               context.read<LoginProvider>().userAddress;
                           String lead = userAddress.substring(2, 6);
@@ -192,7 +193,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 options: _getCarouseOption(),
                               );
                               switch (value.state) {
-                                case LoginState.loaded:
+                                case EventState.loaded:
                                   return SizedBox(
                                     child: FutureBuilder(
                                       future: NftService.getNfts(userAddress),
@@ -283,12 +284,18 @@ class _ProfilePageState extends State<ProfilePage> {
         var index = FakeData.findIndexById(
             object.data?.content?.fields['event_id'] ?? '');
         print("index: $index");
+        Nftinfodata data = Nftinfodata(
+            ticketName: object.data?.content?.fields['name'] ?? '',
+            ticketDes: object.data?.content?.fields['description'] ?? '',
+            ticketImg: object.data?.content?.fields['url'] ?? '', hostName: '', hostImg: '');
         Navigator.pushNamed(context, Routes.detailTicketPage, arguments: [
           index == -1 ? 0 : index,
           NftInfo(
               suiObjectRef: SuiObjectRef(object.data!.digest,
                   object.data!.objectId, object.data!.version),
-              objectType: object.data!.type!)
+              objectType: object.data!.type!,
+              data: data
+          )
         ]);
 
       },

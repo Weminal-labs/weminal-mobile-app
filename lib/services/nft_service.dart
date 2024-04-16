@@ -24,7 +24,7 @@ class NftService {
     return type == '0x2::coin::Coin<0x2::sui::SUI>';
   }
 
-  static void createNft(
+  static Future<String> createNft(
       {required Keypair ephemeralKeyPair,
       required String senderAddress,
       required String name,
@@ -36,11 +36,12 @@ class NftService {
     const packageObjectId =
         '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef';
     txb.moveCall('$packageObjectId::event::new_ticket', arguments: [
-      txb.pureString('name ticket 1'),
-      txb.pureString('name ticket 1'),
-      txb.pureString('des ticket 1'),
+      txb.pureString(name),
+      txb.pureString(description),
+      txb.pureString(
+            imageUrl),
       txb.pure(
-          '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef'),
+          packageObjectId),
       txb.pure(senderAddress)
     ]);
 
@@ -58,73 +59,6 @@ class NftService {
       [zkSign],
     );
 
-
-
-    print('sign: $sign');
-
-    print('zkSign: $zkSign');
-
-    print('createNft: ${txbres.digest}');
-  }
-
-  static Future<String> buyNFT(
-      Keypair ephemeralKeyPair,
-      String senderAddress,
-      String ticketName,
-      String ticketDes,
-      String ticketImg,
-      String eventObjectId,
-      ) async {
-
-    final txb = TransactionBlock();
-    txb.setSender(senderAddress);
-    const packageObjectId =
-        '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef';
-    txb.moveCall('$packageObjectId::event::new_ticket', arguments: [
-      txb.pureString(ticketName),
-      txb.pureString(ticketDes),
-      txb.pureString(
-          ticketImg),
-      txb.pure(
-          eventObjectId),
-      txb.pure(senderAddress)
-    ]);
-    final sign = await txb
-        .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
-    final zkSign = ZkSignBuilder.getZkSign(signSignature: sign.signature);
-
-    final respZkSend = await suiClient.executeTransactionBlock(
-      sign.bytes,
-      [zkSign],
-      options: SuiTransactionBlockResponseOptions(showEffects: true),
-    );
-    return respZkSend.digest;
-  }
-
-  static Future<String> sendNFT(
-      Keypair ephemeralKeyPair,
-      String senderAddress,
-      String objectId
-      ) async {
-
-    final txb = TransactionBlock();
-    txb.setSender(senderAddress);
-    const packageObjectId =
-        '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef';
-    txb.moveCall('$packageObjectId::event::new_ticket', arguments: [
-      txb.pure(
-          objectId),
-      txb.pure(senderAddress)
-    ]);
-    final sign = await txb
-        .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
-    final zkSign = ZkSignBuilder.getZkSign(signSignature: sign.signature);
-
-    final respZkSend = await suiClient.executeTransactionBlock(
-      sign.bytes,
-      [zkSign],
-      options: SuiTransactionBlockResponseOptions(showEffects: true),
-    );
-    return respZkSend.digest;
+    return txbres.digest;
   }
 }

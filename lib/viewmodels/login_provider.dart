@@ -17,7 +17,7 @@ import 'package:weminal_app/utilities/constants.dart';
 
 import '../models/event_model.dart';
 import '../models/request_proof_model.dart';
-import '../states/login_state.dart';
+import '../states/state.dart';
 import 'package:http/http.dart' as http;
 
 import '../utilities/fake_data.dart';
@@ -33,11 +33,11 @@ class LoginProvider extends ChangeNotifier {
     "Content-Type": "application/json",
     "Accept": "application/json",
   };
-  LoginState _state = LoginState.initial;
+  EventState _state = EventState.initial;
 
-  LoginState get state => _state;
+  EventState get state => _state;
   final String urlGetProof =
-      'http://192.168.1.32:3000/api/v1/contract/getZkProof';
+      "${Constants.baseUrl}/contract/getZkProof";
 
   // final String urlGetProof = 'https://prover-dev.mystenlabs.com/v1';
 
@@ -61,13 +61,13 @@ class LoginProvider extends ChangeNotifier {
 
   void loadAddressAndSignature(String userJwt,
       Map<String, dynamic> resProofRequestInfo) async {
-    _state = LoginState.loading;
+    _state = EventState.loading;
     notifyListeners();
     Map<String, String> addressAndSignature =
     await _handleLogin(userJwt, resProofRequestInfo);
     userAddress = addressAndSignature['userAddress']!;
     userAddressStatic = userAddress;
-    _state = LoginState.loaded;
+    _state = EventState.loaded;
     notifyListeners();
   }
 

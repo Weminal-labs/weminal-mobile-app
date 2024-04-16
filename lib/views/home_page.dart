@@ -166,12 +166,13 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
+
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
+                      image:  DecorationImage(
                         fit: BoxFit.fitHeight,
-                        image: AssetImage("assets/images/sui_bg.jpg"),
+                        image: NetworkImage(context.read<LoginProvider>().events[itemIndex].coverUrl),
                       ),
                     ),
                   ),

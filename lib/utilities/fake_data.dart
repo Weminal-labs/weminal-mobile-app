@@ -6,7 +6,7 @@ class FakeData {
     {
       "id": "evt-AipW3EfmGB81vDC",
       "name": "Introduction to Sui and Move",
-      "cover_url": "assets/images/sui_bg.jpg",
+      "cover_url": "https://saigontradecoin.com/wp-content/uploads/2023/02/Sui-Blockchain-supports-Web3-community.jpeg",
       "created_at": "2024-03-12T01:41:30.679Z",
       "desription":
           "The Sui Foundation supports the advancement and adoption of the Sui blockchain ecosystem.",
@@ -41,7 +41,7 @@ class FakeData {
     {
       "id": "evt-AipW3EfmGB81vDC",
       "name": "The VBI Blockchain Hackathon",
-      "cover_url": "assets/images/vbi.jpg",
+      "cover_url": "https://1.bp.blogspot.com/-m0lqOYybTbE/YGSK7L9P5jI/AAAAAAAADMQ/dEJGMJITAQgAQWwbeuk92fs2ZqetgiQqQCLcBGAsYHQ/s800/ENaTHGluT4GvLbNHC6PSsIwSuk1yw1TV-wE4fqXsqkDt_CjAARGDuVD60XLBG5_Eapkw-Wg1MLbu0xj8ywMdrBpcSnVzLpoHWfkF.png",
       "created_at": "2024-03-12T01:41:30.679Z",
       "desription":
           "The VBI Blockchain Hackathon is a programming competition event where computer programmers and others engage in blockchain-themed software development.",

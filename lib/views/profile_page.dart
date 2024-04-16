@@ -477,7 +477,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   bool _isImageUrl(String url) {
-    return url.contains(RegExp(r'\.(jpeg|jpg|gif|png|webp|bmp|wbmp)$', caseSensitive: false));
+    return url.contains("jpg") || url.contains("jpeg") || url.contains("png");
   }
 
   Widget _base64Image(String url) {

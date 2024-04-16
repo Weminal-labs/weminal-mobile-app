@@ -5,6 +5,7 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:provider/provider.dart';
 import 'package:sui/sui.dart';
 import 'package:weminal_app/models/NftInfo.dart';
+import 'package:weminal_app/views/qr_component.dart';
 import 'package:weminal_app/zkSend/builder.dart';
 
 import '../viewmodels/login_provider.dart';
@@ -251,32 +252,7 @@ class DetailTicketPage extends StatelessWidget {
                                 nftInfo.suiObjectRef.version),
                             objectType: nftInfo.objectType);
                         print('detail ticket url: $url');
-                        final qrCode = QrCode(
-                          8,
-                          QrErrorCorrectLevel.H,
-                        )..addData(url);
-
-                        QrImage qrImage = QrImage(qrCode);
-
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Column(
-                              children: [
-                                Text('url: $url'),
-                                SimpleDialog(
-                                  backgroundColor: Colors.white,
-                                  children: [
-                                    PrettyQrView(
-                                      qrImage: qrImage,
-                                      decoration: const PrettyQrDecoration(),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        _showAddBottomPopup(context, url, event.name);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black),
@@ -294,4 +270,16 @@ class DetailTicketPage extends StatelessWidget {
       ),
     );
   }
+  void _showAddBottomPopup(context, userAddress, eventName) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return QrComponent(
+          wallet: userAddress,
+          eventName: eventName,
+        );
+      },
+    );
+  }
+
 }

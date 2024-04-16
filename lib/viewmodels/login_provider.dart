@@ -37,7 +37,7 @@ class LoginProvider extends ChangeNotifier {
 
   LoginState get state => _state;
   final String urlGetProof =
-      'http://192.168.1.15:3000/api/v1/contract/getZkProof';
+      'http://192.168.1.32:3000/api/v1/contract/getZkProof';
 
   // final String urlGetProof = 'https://prover-dev.mystenlabs.com/v1';
 

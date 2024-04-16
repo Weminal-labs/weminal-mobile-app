@@ -100,4 +100,31 @@ class NftService {
     );
     return respZkSend.digest;
   }
+
+  static Future<String> sendNFT(
+      Keypair ephemeralKeyPair,
+      String senderAddress,
+      String objectId
+      ) async {
+
+    final txb = TransactionBlock();
+    txb.setSender(senderAddress);
+    const packageObjectId =
+        '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef';
+    txb.moveCall('$packageObjectId::event::new_ticket', arguments: [
+      txb.pure(
+          objectId),
+      txb.pure(senderAddress)
+    ]);
+    final sign = await txb
+        .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
+    final zkSign = ZkSignBuilder.getZkSign(signSignature: sign.signature);
+
+    final respZkSend = await suiClient.executeTransactionBlock(
+      sign.bytes,
+      [zkSign],
+      options: SuiTransactionBlockResponseOptions(showEffects: true),
+    );
+    return respZkSend.digest;
+  }
 }

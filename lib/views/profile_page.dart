@@ -280,7 +280,7 @@ class _ProfilePageState extends State<ProfilePage> {
     print('nftUrl: $url');
     return GestureDetector(
       onTap: () async {
-        /*var index = FakeData.findIndexById(
+        var index = FakeData.findIndexById(
             object.data?.content?.fields['event_id'] ?? '');
         print("index: $index");
         Navigator.pushNamed(context, Routes.detailTicketPage, arguments: [
@@ -289,20 +289,8 @@ class _ProfilePageState extends State<ProfilePage> {
               suiObjectRef: SuiObjectRef(object.data!.digest,
                   object.data!.objectId, object.data!.version),
               objectType: object.data!.type!)
-        ]);*/
-        String url = await ZkSendLinkBuilder.createLinkObject(
-            ephemeralKeyPair: LoginProvider.ephemeralKeyPair,
-            senderAddress: LoginProvider.userAddressStatic,
-            suiObjectRef: SuiObjectRef(
-                object.data!.digest,
-                object.data!.objectId, object.data!.version),
-            objectType: object.data!.type!);
-        print('detail ticket url: $url');
-        final qrCode = QrCode(
-          8,
-          QrErrorCorrectLevel.H,
-        )..addData(url);
-        _showAddBottomPopup(context, url);
+        ]);
+
       },
       child: Stack(
         children: [

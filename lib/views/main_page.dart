@@ -92,7 +92,7 @@ class _MainPageState extends State<MainPage> {
       appBar: appBarList[_indexPage],
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.blueAccent.withOpacity(0.8),
         onPressed: () {
           _showAddBottomPopup();
         },
@@ -253,7 +253,7 @@ class _MainPageState extends State<MainPage> {
           unselectedFontSize: 17,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          selectedItemColor: Colors.blue,
+          selectedItemColor: Colors.blueAccent,
           unselectedItemColor: Colors.grey,
           currentIndex: _indexPage,
           onTap: (value) {

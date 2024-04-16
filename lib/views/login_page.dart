@@ -215,7 +215,6 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 40.0),
                       OutlinedButton(
                         onPressed: () async {
-                          // login with google
                           try {
                             await _handleLoginButtonClick(
                                 URL, requestProofModel, res);

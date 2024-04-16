@@ -38,6 +38,7 @@ class LoginProvider extends ChangeNotifier {
   LoginState get state => _state;
   final String urlGetProof =
       'http://192.168.1.15:3000/api/v1/contract/getZkProof';
+
   // final String urlGetProof = 'https://prover-dev.mystenlabs.com/v1';
 
   String zkSignature = '';
@@ -45,23 +46,25 @@ class LoginProvider extends ChangeNotifier {
   static String userAddressStatic = '';
 
   static final List<Event> eventList =
-      FakeData.json.map((e) => Event.fromJson(e)).toList();
+  FakeData.json.map((e) => Event.fromJson(e)).toList();
   var bytes;
   var zkSign;
   var suiClient = SuiClient(Constants.baseNet);
 
   List<Event> get events => eventList;
+
   void addEvent(Event event) {
     eventList.add(event);
     notifyListeners();
   }
 
-  void loadAddressAndSignature(
-      String userJwt, Map<String, dynamic> resProofRequestInfo) async {
+
+  void loadAddressAndSignature(String userJwt,
+      Map<String, dynamic> resProofRequestInfo) async {
     _state = LoginState.loading;
     notifyListeners();
     Map<String, String> addressAndSignature =
-        await _handleLogin(userJwt, resProofRequestInfo);
+    await _handleLogin(userJwt, resProofRequestInfo);
     userAddress = addressAndSignature['userAddress']!;
     userAddressStatic = userAddress;
     _state = LoginState.loaded;
@@ -80,7 +83,7 @@ class LoginProvider extends ChangeNotifier {
     var proof = await getProof(RequestProofModel(
         jwt: requestProofModel.jwt,
         extendedEphemeralPublicKey:
-            requestProofModel.extendedEphemeralPublicKey,
+        requestProofModel.extendedEphemeralPublicKey,
         maxEpoch: requestProofModel.maxEpoch,
         jwtRandomness: requestProofModel.jwtRandomness,
         salt: requestProofModel.salt,
@@ -104,78 +107,8 @@ class LoginProvider extends ChangeNotifier {
     ZkSignBuilder.setInfo(
         inputZkLoginSignatureInputs: zkLoginSignatureInputs,
         inputMaxEpoch:
-            int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')));
+        int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')));
 
-    // Test move call
-    //test move call
-    // final txb = TransactionBlock();
-    // txb.setSender(userAddress);
-    // const packageObjectId =
-    //     '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef';
-    // txb.moveCall('$packageObjectId::event::new_ticket', arguments: [
-    //   txb.pureString('name ticket 1'),
-    //   txb.pureString('name ticket 1'),
-    //   txb.pureString('des ticket 1'),
-    //   txb.pure(
-    //       '0xbfec71e0f811e27d3393b0470941fe3da85df8c7df8497d5538cc758f90cb2ef'),
-    //   txb.pure(userAddress)
-    // ]);
-    // final sign = await txb
-    //     .sign(SignOptions(signer: ephemeralKeyPair, client: suiClient));
-    //
-    // print('sign.signature: ${sign.signature}');
-    //
-    // final zkSign = getZkLoginSignature(ZkLoginSignature(
-    //     inputs: zkLoginSignatureInputs,
-    //     maxEpoch: int.parse((res['maxEpoch']!).toString().replaceAll('.0', '')),
-    //     userSignature: base64Decode(sign.signature)));
-    //
-    // final resp = await suiClient.executeTransactionBlock(sign.bytes, [zkSign],
-    //     options: SuiTransactionBlockResponseOptions(showEffects: true));
-    // String zkSignature = resp.digest;
-    //
-    // var bytes = sign.bytes;
-    // print('zkSignature: $zkSignature');
-    // var serializedSignature = parseSerializedSignature(zkSign);
-    // print('serializedSignature: ${serializedSignature}');
-    //
-    // base64Decode(zkSign).toList();
-    // List<String> tepm =
-    //     base64Decode(zkSign).toList().map((e) => e.toString()).toList();
-    // print('base64Decode(zkSign): ${base64Decode(zkSign)}');
-    // var txbres = await suiClient.executeTransactionBlock(
-    //   sign.bytes,
-    //   [zkSign],
-    // );
-    // print('txbres: ${txbres.digest}');
-    // print('sign: $sign');
-    //
-    // print('zkSign: $zkSign');
-    //
-    // String myUrl = await ZkSendLinkBuilder.createLink(
-    //     ephemeralKeyPair: ephemeralKeyPair,
-    //     senderAddress: userAddress,
-    //     balances: 100000000);
-    // print('getNft');
-    // var nfts = await getNfts(userAddress);
-    // print('nfts: $nfts');
-    // for (var nft in nfts) {
-    //   print('nft Info');
-    //   print('digest: ${nft.data!.digest}');
-    //   print('objectId: ${nft.data!.objectId}');
-    //   print('version: ${nft.data!.version}');
-    //   print('objectType: ${nft.data!.type}');
-    //   print('content: ${nft.data!.content}');
-    //   print('fields: ${nft.data!.content!.fields}');
-    // }
-    //
-    // String myUrl = await ZkSendLinkBuilder.createLinkObject(
-    //     ephemeralKeyPair: ephemeralKeyPair,
-    //     senderAddress: userAddress,
-    //     suiObjectRef: SuiObjectRef(
-    //         nft.data!.digest, nft.data!.objectId, nft.data!.version),
-    //     objectType: nft.data!.type!);
-    // print('myUrl: $myUrl');
     print('userAdrress: $userAddress');
     return {
       'userAddress': userAddress,
@@ -201,16 +134,4 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getEvents() async {
-    final obj = await suiClient.getObject(userAddress,
-        options: SuiObjectDataOptions(showContent: true));
-  }
-  //
-  // Future<void> createNft() async{
-  //   final resp = await suiClient.executeTransactionBlock(
-  //         bytes,
-  //         [zkSign],
-  //   );
-  //   print('respZkSend: ${resp.digest}');
-  // }
 }

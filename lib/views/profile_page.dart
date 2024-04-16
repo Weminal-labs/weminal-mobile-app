@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sui/http/http.dart' as http;
@@ -19,6 +20,7 @@ import 'package:weminal_app/viewmodels/login_provider.dart';
 
 import '../states/login_state.dart';
 import '../widget/stack_widget.dart';
+import '../zkSend/builder.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -86,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 const Text(
                   'Lê Huỳnh Phát',
                   style: TextStyle(
-                      color: Color(0xff5669FF),
+                      color: Colors.blueAccent,
                       fontWeight: FontWeight.w800,
                       fontSize: 32),
                 ),
@@ -111,15 +113,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           String lead = userAddress.substring(2, 6);
                           String tail =
                               userAddress.substring(userAddress.length - 4);
-                          // context.read<LoginProvider>().createNft();
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              SizedBox(width: 10),
                               Text(
-                                'WalletID: 0X-$lead-XXXX-$tail',
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
+                                '0X-$lead-XXXX-$tail',
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(0.8),
+                                    fontSize: 22,
                                     fontWeight: FontWeight.w800),
                               ),
                               const SizedBox(
@@ -185,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 itemCount: 1,
                                 itemBuilder: (BuildContext context,
                                     int itemIndex, int pageViewIndex) {
-                                  return _buildCarouseItemShimmer();
+                                  return   _buildCarouseItemShimmer();
                                 },
                                 options: _getCarouseOption(),
                               );
@@ -201,14 +203,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                             itemBuilder: (BuildContext context,
                                                 int itemIndex,
                                                 int pageViewIndex) {
-                                              return _buildCarouseItem(
-                                                  snapshot.data![itemIndex]);
+                                              return snapshot.data!.isNotEmpty? _buildCarouseItem(
+                                                  snapshot.data![itemIndex]) : Container();
                                             },
                                             options: _getCarouseOption(),
                                           );
-                                        } else {
-                                          return myWidget;
                                         }
+                                        return Container();
                                       },
                                     ),
                                   );
@@ -278,8 +279,8 @@ class _ProfilePageState extends State<ProfilePage> {
     String? url = object.data?.content?.fields['url'];
     print('nftUrl: $url');
     return GestureDetector(
-      onTap: () {
-        var index = FakeData.findIndexById(
+      onTap: () async {
+        /*var index = FakeData.findIndexById(
             object.data?.content?.fields['event_id'] ?? '');
         print("index: $index");
         Navigator.pushNamed(context, Routes.detailTicketPage, arguments: [
@@ -288,7 +289,20 @@ class _ProfilePageState extends State<ProfilePage> {
               suiObjectRef: SuiObjectRef(object.data!.digest,
                   object.data!.objectId, object.data!.version),
               objectType: object.data!.type!)
-        ]);
+        ]);*/
+        String url = await ZkSendLinkBuilder.createLinkObject(
+            ephemeralKeyPair: LoginProvider.ephemeralKeyPair,
+            senderAddress: LoginProvider.userAddressStatic,
+            suiObjectRef: SuiObjectRef(
+                object.data!.digest,
+                object.data!.objectId, object.data!.version),
+            objectType: object.data!.type!);
+        print('detail ticket url: $url');
+        final qrCode = QrCode(
+          8,
+          QrErrorCorrectLevel.H,
+        )..addData(url);
+        _showAddBottomPopup(context, url);
       },
       child: Stack(
         children: [
@@ -395,6 +409,100 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+  void _showAddBottomPopup(context, qrLink){
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        final qrCode = QrCode(
+          8,
+          QrErrorCorrectLevel.H,
+        )..addData(qrLink);
+
+        QrImage qrImage = QrImage(
+            qrCode
+        );
+        return Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10)),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      "Your Ticket",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                  ),
+                  Divider(
+                    thickness: 1.2,
+                    color: Colors.grey.shade200,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    "zkSend link",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(6)),
+                    child: TextField(
+                      onTap: (){
+                        Clipboard.setData(ClipboardData(text: qrLink));
+                        Fluttertoast.showToast(
+                            msg: "Copied to clipboard",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      },
+                      readOnly: true,
+                      decoration: InputDecoration(
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          hintText: "$qrLink",
+                          hintStyle: TextStyle(color: Colors.grey)),
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                  Center(
+                    child: SizedBox(
+                      width: 150,
+                      height: 150,
+                      child: PrettyQrView(
+                        qrImage: qrImage,
+                        decoration: const PrettyQrDecoration(
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
 
   Widget buildStackedImages({
     TextDirection direction = TextDirection.ltr,
@@ -452,20 +560,41 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  dynamic _handleUrl(String? url) {
+  Widget _handleUrl(String? url) {
     print('my ticket url: $url');
     if (url == null) {
-      return Image.asset('assets/images/event_background.png');
+      return _defaultImage();
     }
 
-    late Uint8List decodeUrl;
-    if (url.contains('data:image/jpeg;base64,')) {
-      decodeUrl = base64Decode(url.replaceAll('data:image/jpeg;base64,', ''));
-      return Image.memory(decodeUrl);
+    if (_isBase64Image(url)) {
+      return _base64Image(url);
     }
-    if (url.contains('png') || url.contains('jpg')) {
-      return Image.network(url);
+
+    if (_isImageUrl(url)) {
+      return _networkImage(url);
     }
+
+    return _defaultImage();
+  }
+
+  bool _isBase64Image(String url) {
+    return url.contains('data:image/jpeg;base64,');
+  }
+
+  bool _isImageUrl(String url) {
+    return url.contains(RegExp(r'\.(jpeg|jpg|gif|png|webp|bmp|wbmp)$', caseSensitive: false));
+  }
+
+  Widget _base64Image(String url) {
+    final decodeUrl = base64Decode(url.replaceAll('data:image/jpeg;base64,', ''));
+    return Image.memory(decodeUrl);
+  }
+
+  Widget _networkImage(String url) {
+    return Image.network(url);
+  }
+
+  Widget _defaultImage() {
     return Image.asset('assets/images/event_background.png');
   }
 }
